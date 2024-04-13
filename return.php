@@ -76,6 +76,13 @@ $(document).ready(function() {
     // Event listener for any return quantity input field
     $(document).on('input', 'input[name="return_quantity[]"]', function() {
         var returnQuantity = parseInt($(this).val());
+        var maxReturnQuantity = parseInt($(this).attr('max'));
+        if (returnQuantity > maxReturnQuantity) {
+            alert('Return quantity cannot be greater than the sold quantity.');
+            $(this).val(maxReturnQuantity);
+            returnQuantity = maxReturnQuantity;
+        }
+
         var unitPrice = parseFloat($(this).closest('tr').find('td:eq(3)').text());
         var returnPrice = calculateReturnPrice(returnQuantity, unitPrice);
         $(this).closest('tr').find('td:eq(4)').text(returnPrice.toFixed(2)); // Update return price in the corresponding table cell
