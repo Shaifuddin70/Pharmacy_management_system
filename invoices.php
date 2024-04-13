@@ -47,27 +47,29 @@ $result = mysqli_query($conn, $query);
         <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
             <thead>
                 <tr>
-                    <th>S/N</th>
+                    <th>Invoice ID</th> <!-- Changed header to 'Invoice ID' -->
                     <th>Customer Name</th>
                     <th>Total</th>
                     <th>Discount</th>
                     <th>Subtotal</th>
                     <th>Created At</th>
-                    <th>Details</th> <!-- New column for buttons -->
+                    <th>Details</th>
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                $serial_number = $offset + 1; // Initialize serial number based on offset
+                <?php
+                // Initialize serial number based on offset
+                $serial_number = $offset + 1;
                 while ($row = mysqli_fetch_assoc($result)) : ?>
                     <tr>
-                        <td><?php echo $serial_number++; ?></td>
+                        <!-- Display the invoice ID instead of serial number -->
+                        <td><?php echo $row['invoice_id']; ?></td>
                         <td><?php echo $row['customer_name']; ?></td>
                         <td><?php echo $row['total']; ?></td>
                         <td><?php echo $row['discount']; ?></td>
                         <td><?php echo $row['subtotal']; ?></td>
                         <td><?php echo $row['created_at']; ?></td>
-                        <td><a href="invoice_details.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td> <!-- Button for details -->
+                        <td><a href="invoice_details.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -77,7 +79,7 @@ $result = mysqli_query($conn, $query);
     <!-- Pagination links -->
     <div class="pagination">
         <ul class="pagination">
-            <!-- Previous button -->
+            <!-- Pagination links -->
             <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
                 <a class="page-link" href="?page=<?php echo $page - 1; ?>">&laquo; Previous</a>
             </li>
@@ -86,7 +88,6 @@ $result = mysqli_query($conn, $query);
                     <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                 </li>
             <?php endfor; ?>
-            <!-- Next button -->
             <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
                 <a class="page-link" href="?page=<?php echo $page + 1; ?>">Next &raquo;</a>
             </li>

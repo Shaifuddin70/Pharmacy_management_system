@@ -11,7 +11,7 @@ if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
 // Handle form submission
 if (isset($_POST['submit'])) {
     // Retrieve form data
-   
+
     $customer_id = $_POST['customer'];
     $discount = $_POST['discount'];
     $subtotal = $_POST['submit_subtotal']; // Corrected: Retrieve subtotal from form data
@@ -44,12 +44,40 @@ if (isset($_POST['submit'])) {
             }
         }
 
+
+        // Retrieve customer's email address
+        $query = "SELECT customer_email FROM customer WHERE customer_id = '$customer_id'";
+        $emailResult = mysqli_query($conn, $query);
+        $emailRow = mysqli_fetch_assoc($emailResult);
+        $customerEmail = $emailRow['customer_email'];
+
+        // Compose the email message with order details
+        $subject = "Your Order Details";
+        $message = "Dear Customer,\n\n";
+        $message .= "Thank you for your order. Below are the details:\n\n";
+        $message .= "Invoice ID: $invoice_id\n";
+        $message .= "Total: $total\n";
+        $message .= "Discount: $discount%\n";
+        $message .= "Subtotal: $subtotal\n\n";
+        $message .= "Medicine Details:\n";
+        foreach ($medicines as $index => $medicine_id) {
+            $message .= "Medicine ID: $medicine_id, Quantity: $quantities[$index], Total Price: $total_prices[$index]\n";
+        }
+        $message .= "\n\nThank you for shopping with us.\n\nBest regards,\nYour Store";
+
+        // Send email
+        $headers = "From: rokib2064@gmail.com"; // Set your store's email address here
+        mail($customerEmail, $subject, $message, $headers);
+
         // Redirect to a success page or display a success message
-        echo "<script>alert('Invoice submitted successfully')</script>";
-        echo "<script>window.location='invoices.php'</script>";
+        echo "<script>alert('Invoice submitted successfully and email sent to customer')</script>";
+        // echo "<script>window.location='invoices.php'</script>";
+        // End script execution after redirection
         exit(); // End script execution after redirection
     }
 }
+
+
 
 ?>
 
@@ -57,7 +85,7 @@ if (isset($_POST['submit'])) {
     <div class="title">
 
         <form action="" method="post" onsubmit="return validateForm()">
-            <h1 class="font-weight-bold">All Invoice</h1>
+            <h1 class="font-weight-bold">Create New Invoice</h1>
             <?php
             // Retrieve the maximum invoice_id from the invoices table
             $query = "SELECT MAX(invoice_id) AS max_id FROM invoices";

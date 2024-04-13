@@ -138,6 +138,15 @@ $conn =  $db->getConnstring();
         </ul>
       </li>
       <li>
+        <a href="return.php">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="link_name">Return</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="return.php">Return</a></li>
+        </ul>
+      </li>
+      <li>
         <a href="stock.php">
           <i class='bx bx-pie-chart-alt-2'></i>
           <span class="link_name">Stock</span>

@@ -39,7 +39,6 @@ if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $number = $_POST['number'];
-    $pass = password_hash($pass, PASSWORD_DEFAULT);
     $query = "INSERT INTO customer(`customer_name`,`customer_email`,`customer_number`)VALUES('$name','$email','$number')";
     $data = mysqli_query($conn, $query);
 

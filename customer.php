@@ -51,12 +51,7 @@ $total_pages = ceil($total_results / $results_per_page);
         <h1 class="font-weight-bold">Customer List</h1>
         <a href="add_customer.php"><button class="col-2 btn btn-primary add_button"> Add Customer</button> </a>
     </div>
-    <?php
-    if (isset($_SESSION['status'])) {
-        echo "<p class='text-danger'>" . $_SESSION['status'] . "</p>";
-        unset($_SESSION['status']);
-    }
-    ?>
+ 
     <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
