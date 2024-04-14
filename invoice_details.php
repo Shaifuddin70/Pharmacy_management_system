@@ -24,7 +24,7 @@ $result = mysqli_query($conn, $query);
 // Check if the invoice exists
 if (mysqli_num_rows($result) == 0) {
     echo "<script>alert('Invoice not found')</script>";
-    echo "<script>window.location='all_invoices.php'</script>";
+    echo "<script>window.location='invoices.php'</script>";
     exit();
 }
 

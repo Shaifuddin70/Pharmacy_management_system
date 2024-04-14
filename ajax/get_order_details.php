@@ -3,7 +3,6 @@ include '../db_connect.php';
 $db = new dbObj();
 $conn = $db->getConnstring();
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['invoiceId'])) {
     $invoiceId = $_POST['invoiceId'];
 

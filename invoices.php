@@ -39,6 +39,24 @@ INNER JOIN customer ON invoices.customer_id = customer.customer_id
 ORDER BY invoices.created_at DESC
 LIMIT $offset, $results_per_page";
 $result = mysqli_query($conn, $query);
+
+
+if (isset($_POST['delete_invoice'])) {
+    // Retrieve invoice ID
+    $invoice_id = $_POST['invoice_id'];
+
+    // Delete invoice items
+    $delete_items_query = "DELETE FROM invoice_items WHERE invoice_id = $invoice_id";
+    mysqli_query($conn, $delete_items_query);
+
+    // Delete invoice
+    $delete_invoice_query = "DELETE FROM invoices WHERE invoice_id = $invoice_id";
+    mysqli_query($conn, $delete_invoice_query);
+
+    // Redirect to this page to refresh the invoice list
+    header("Location: invoices.php");
+    exit();
+}
 ?>
 
 <div class="container">
@@ -54,6 +72,7 @@ $result = mysqli_query($conn, $query);
                     <th>Subtotal</th>
                     <th>Created At</th>
                     <th>Details</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +89,12 @@ $result = mysqli_query($conn, $query);
                         <td><?php echo $row['subtotal']; ?></td>
                         <td><?php echo $row['created_at']; ?></td>
                         <td><a href="invoice_details.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
+                        <td>
+                            <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.');">
+                                <input type="hidden" name="invoice_id" value="<?php echo $row['invoice_id']; ?>">
+                                <button type="submit" class="btn btn-danger" name="delete_invoice">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
