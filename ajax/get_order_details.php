@@ -5,33 +5,29 @@ $conn = $db->getConnstring();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['invoiceId'])) {
     $invoiceId = $_POST['invoiceId'];
-
-    $db = new dbObj();
-    $conn = $db->getConnstring();
-
     try {
-        $query = "SELECT discount FROM invoices WHERE invoice_id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $invoiceId);
-        $stmt->execute();
-        $discountResult = $stmt->get_result();
+        // Query to fetch discount
+        $queryDiscount = "SELECT discount FROM invoices WHERE invoice_id = ?";
+        $stmtDiscount = $conn->prepare($queryDiscount);
+        $stmtDiscount->bind_param("i", $invoiceId);
+        $stmtDiscount->execute();
+        $discountResult = $stmtDiscount->get_result();
         $discountRow = $discountResult->fetch_assoc();
         $discount = isset($discountRow['discount']) ? (float)$discountRow['discount'] : 0;
-        // Prepare and execute SQL query to fetch order details
+
+        // Query to fetch order details
         $query = "SELECT 
-        m.medicine_name,
-        ii.quantity AS sold_quantity,
-        ms.sprice AS unit_price,
-        i.discount
-    FROM 
-        invoice_items AS ii
-    JOIN 
-        medicine AS m ON ii.medicine_id = m.medicine_id
-    JOIN 
-        medicine_stock AS ms ON ii.medicine_id = ms.medicine_id
-    JOIN 
-        invoices AS i ON ii.invoice_id = i.invoice_id
-    WHERE ii.invoice_id = ?";
+            m.medicine_id,
+            m.medicine_name,
+            ii.quantity AS sold_quantity,
+            ms.sprice AS unit_price
+        FROM 
+            invoice_items AS ii
+        JOIN 
+            medicine AS m ON ii.medicine_id = m.medicine_id
+        JOIN 
+            medicine_stock AS ms ON ii.medicine_id = ms.medicine_id
+        WHERE ii.invoice_id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $invoiceId);
         $stmt->execute();
@@ -41,6 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['invoiceId'])) {
         $orderDetails = [];
         while ($row = $result->fetch_assoc()) {
             $orderDetails[] = $row;
+        }
+
+        // Add the discount to each row
+        foreach ($orderDetails as &$orderDetail) {
+            $orderDetail['discount'] = $discount;
         }
 
         // Set the Content-Type header to JSON

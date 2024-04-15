@@ -90,13 +90,13 @@ if (isset($_POST['delete_invoice'])) {
                         <td><?php echo $row['created_at']; ?></td>
                         <td><a href="invoice_details.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
                         <td>
-                            <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.');">
+                        <form action="delete_invoice.php" method="post" onsubmit="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.');">
                                 <input type="hidden" name="invoice_id" value="<?php echo $row['invoice_id']; ?>">
-                                <button type="submit" class="btn btn-danger" name="delete_invoice">Delete</button>
+                                <button  class="btn btn-danger" name="delete_invoice">Delete</button>
                             </form>
                         </td>
                     </tr>
-                <?php endwhile; ?>
+                <?php endwhile; ?> 
             </tbody>
         </table>
     </div>

@@ -8,21 +8,23 @@ if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
     exit();
 }
 
+// Retrieve employee ID from session if available
+$employee_id = isset($_SESSION['eid']) ? $_SESSION['eid'] : null;
+
 // Handle form submission
 if (isset($_POST['submit'])) {
     // Retrieve form data
-
     $customer_id = $_POST['customer'];
     $discount = $_POST['discount'];
     $subtotal = $_POST['submit_subtotal']; // Corrected: Retrieve subtotal from form data
-
     $total = $_POST['submit_total'];
     $medicines = $_POST['medicine'];
     $quantities = $_POST['quantity'];
     $total_prices = $_POST['submit_total_price'];
 
     // Insert invoice data into the database
-    $query = "INSERT INTO invoices (customer_id, discount, subtotal, total) VALUES ('$customer_id', '$discount', '$subtotal', '$total')";
+    $query = "INSERT INTO invoices (customer_id, employee_id, discount, subtotal, total) 
+              VALUES ('$customer_id', '$employee_id', '$discount', '$subtotal', '$total')";
     $result = mysqli_query($conn, $query);
 
     if (!$result) {
@@ -36,14 +38,14 @@ if (isset($_POST['submit'])) {
             $quantity = $quantities[$index] ?? '';
             $total_price = $total_prices[$index] ?? '';
 
-            $query = "INSERT INTO invoice_items (invoice_id, medicine_id, quantity, total_price) VALUES ('$invoice_id', '$medicine_id', '$quantity', '$total_price')";
+            $query = "INSERT INTO invoice_items (invoice_id, medicine_id, quantity, total_price) 
+                      VALUES ('$invoice_id', '$medicine_id', '$quantity', '$total_price')";
             $result = mysqli_query($conn, $query);
 
             if (!$result) {
                 echo "Error: " . $query . "<br>" . mysqli_error($conn);
             }
         }
-
 
         // Retrieve customer's email address
         $query = "SELECT customer_email FROM customer WHERE customer_id = '$customer_id'";
@@ -76,9 +78,6 @@ if (isset($_POST['submit'])) {
         exit(); // End script execution after redirection
     }
 }
-
-
-
 ?>
 
 <div class="container">

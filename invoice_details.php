@@ -66,28 +66,32 @@ body {
         <h4>Customer Name: <?php echo $row['customer_name']; ?></h4>
 
         <!-- Invoice items table -->
-        <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Medicine Name</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Reset result pointer
-                mysqli_data_seek($result, 0);
-                // Fetch invoice items from the result set
-                while ($item_row = mysqli_fetch_assoc($result)) : ?>
-                    <tr>
-                        <td><?php echo $item_row['medicine_name']; ?></td>
-                        <td><?php echo $item_row['quantity']; ?></td>
-                        <td><?php echo $item_row['total_price']; ?> TK</td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+        <!-- Invoice items table -->
+<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Medicine Name</th>
+            <th>Unit Price (TK)</th>
+            <th>Quantity</th>
+            <th>Total Price (TK)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // Reset result pointer
+        mysqli_data_seek($result, 0);
+        // Fetch invoice items from the result set
+        while ($item_row = mysqli_fetch_assoc($result)) : ?>
+            <tr>
+                <td><?php echo $item_row['medicine_name']; ?></td>
+                <td><?php echo $item_row['total_price'] / $item_row['quantity']; ?></td>
+                <td><?php echo $item_row['quantity']; ?></td>
+                <td><?php echo $item_row['total_price']; ?> TK</td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
+
 
         <!-- Discount and Subtotal -->
         <div class="discount-subtotal">

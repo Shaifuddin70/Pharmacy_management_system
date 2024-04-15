@@ -19,19 +19,22 @@ if (isset($_POST['submit'])) {
     $returnQuantities = $_POST['return_quantity'];
 
     // Loop through the return quantities
-    foreach ($returnQuantities as $key => $returnQuantity) {
-        // Get the corresponding invoice item details
-        $query = "SELECT * FROM invoice_items WHERE invoice_id = $invoiceId";
+    for ($index = 0; $index < count($returnQuantities); $index++) {
+        // Get the medicine ID for the current return quantity
+        $medicineId = $_POST['medicine_id'][$index];
+
+        // Get the corresponding invoice item details for the current medicine
+        $query = "SELECT * FROM invoice_items WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
 
         // Update stock quantity and unit price in medicine_stock table
-        $medicineId = $row['medicine_id'];
         $currentStockQuery = "SELECT unit, sprice FROM medicine_stock WHERE medicine_id = $medicineId";
         $currentStockResult = mysqli_query($conn, $currentStockQuery);
         $currentStockRow = mysqli_fetch_assoc($currentStockResult);
         $currentStock = $currentStockRow['unit'];
         $unitPrice = $currentStockRow['sprice'];
+        $returnQuantity = $returnQuantities[$index]; // Get the return quantity for the current medicine
         $updatedStock = $currentStock + $returnQuantity;
         $updateStockQuery = "UPDATE medicine_stock SET unit = $updatedStock WHERE medicine_id = $medicineId";
         mysqli_query($conn, $updateStockQuery);
@@ -54,10 +57,9 @@ if (isset($_POST['submit'])) {
         mysqli_query($conn, $updateTotalPriceQuery);
 
         // Update subtotal after return
-        
         $query = "UPDATE invoices SET subtotal = subtotal-($returnPrice * (1 - $discount / 100)) WHERE invoice_id = $invoiceId";
-
         mysqli_query($conn, $query);
+
         // Check if sold quantity becomes 0, and delete the item from invoice_items table
         if ($updatedSold == 0) {
             $deleteQuery = "DELETE FROM invoice_items WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
@@ -73,8 +75,6 @@ if (isset($_POST['submit'])) {
     echo "<script>window.location='invoices.php'</script>";
     exit;
 }
-
-
 ?>
 
 <form method="post">
@@ -94,7 +94,6 @@ if (isset($_POST['submit'])) {
                 }
                 ?>
             </select>
-
         </div>
 
         <table id="orderDetailsTable" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
@@ -111,7 +110,6 @@ if (isset($_POST['submit'])) {
             </tbody>
         </table>
         <div class="h5 col-sm-12 text-right ">
-
             Discount (%): <span id="discount"><?php echo $discount; ?></span>
         </div>
         <div class="h5 col-sm-12 text-right ">
@@ -120,9 +118,9 @@ if (isset($_POST['submit'])) {
         <div class="button">
             <button class="btn btn-primary" type="submit" name="submit">SUBMIT</button>
         </div>
-
     </div>
 </form>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -223,6 +221,7 @@ if (isset($_POST['submit'])) {
                                 '<td><input type="number" min="0" max="' + item.sold_quantity + '" name="return_quantity[]" value="0" class="form-control"></td>' +
                                 '<td>' + item.unit_price + '</td>' +
                                 '<td>0.00</td>' +
+                                '<td><input type="hidden" name="medicine_id[]" value="' + item.medicine_id + '"></td>' +
                                 '</tr>'
                             );
                         });
@@ -247,12 +246,6 @@ if (isset($_POST['submit'])) {
             }
         });
     });
-</script>
-
-</script>
-
-</script>
-
 </script>
 
 <?php include 'nav/footer.php'; ?>

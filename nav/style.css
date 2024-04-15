@@ -279,6 +279,7 @@
   width: calc(100% - 260px);
   transition: all 0.5s ease;
   padding: 12px;
+  overflow: hidden;
 }
 
 .sidebar.close~.home-section {
