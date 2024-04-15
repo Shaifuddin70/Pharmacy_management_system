@@ -63,6 +63,17 @@ if (isset($_POST['submit'])) {
             $deleteQuery = "DELETE FROM invoice_items WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
             mysqli_query($conn, $deleteQuery);
         }
+        // Check if there are any invoice items left
+        $query = "SELECT COUNT(*) as count FROM invoice_items WHERE invoice_id = $invoiceId";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($result);
+        $invoiceItemCount = $row['count'];
+
+        if ($invoiceItemCount == 0) {
+            // Delete the invoice if there are no invoice items left
+            $deleteInvoiceQuery = "DELETE FROM invoices WHERE invoice_id = $invoiceId";
+            mysqli_query($conn, $deleteInvoiceQuery);
+        }
     }
 
     // Optionally, log the return transaction in a separate table
@@ -70,7 +81,7 @@ if (isset($_POST['submit'])) {
 
     // Redirect to a success page or show a success message
     echo "<script>alert('Medicine return successful.')</script>";
-    // echo "<script>window.location='invoices.php'</script>";
+    echo "<script>window.location='invoices.php'</script>";
     exit;
 }
 ?>
