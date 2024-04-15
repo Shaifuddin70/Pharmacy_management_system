@@ -8,16 +8,14 @@ if (isset($_SESSION['stuff'])) {
     echo "<script>window.location='index.php'</script>";
     exit; // Stop execution if unauthorized
 }
-
-// Initialize discount variable
 $discount = 0;
-
 // Check if the form is submitted
 if (isset($_POST['submit'])) {
     // Retrieve form data
     $invoiceId = $_POST['invoiceId'];
     $returnQuantities = $_POST['return_quantity'];
-
+    $discount = $_POST['discount']; // Retrieve the discount value
+    echo $discount;
     // Loop through the return quantities
     for ($index = 0; $index < count($returnQuantities); $index++) {
         // Get the medicine ID for the current return quantity
@@ -72,7 +70,7 @@ if (isset($_POST['submit'])) {
 
     // Redirect to a success page or show a success message
     echo "<script>alert('Medicine return successful.')</script>";
-    echo "<script>window.location='invoices.php'</script>";
+    // echo "<script>window.location='invoices.php'</script>";
     exit;
 }
 ?>
@@ -126,6 +124,25 @@ if (isset($_POST['submit'])) {
     $(document).ready(function() {
         // Initialize discount variable
         var discount = 0;
+
+        // Update discount value whenever it changes
+        $('#discount').change(function() {
+            discount = parseFloat($(this).text()); // Update discount value
+            // Update total return price
+            var totalReturnPrice = calculateTotalReturnPrice();
+            $('#totalReturnPrice').text(totalReturnPrice.toFixed(2));
+        });
+
+        // Event listener for form submission
+        $('form').submit(function(event) {
+            // Add a hidden input field to store the discount value before submitting the form
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'discount',
+                value: discount
+            }).appendTo($(this));
+        });
+
 
         // Function to calculate return price
         function calculateReturnPrice(returnQuantity, unitPrice) {
@@ -221,7 +238,7 @@ if (isset($_POST['submit'])) {
                                 '<td><input type="number" min="0" max="' + item.sold_quantity + '" name="return_quantity[]" value="0" class="form-control"></td>' +
                                 '<td>' + item.unit_price + '</td>' +
                                 '<td>0.00</td>' +
-                                '<td><input type="hidden" name="medicine_id[]" value="' + item.medicine_id + '"></td>' +
+                                '<input type="hidden" name="medicine_id[]" value="' + item.medicine_id + '">' +
                                 '</tr>'
                             );
                         });
