@@ -47,36 +47,22 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        // Retrieve customer's email address
-        $query = "SELECT customer_email FROM customer WHERE customer_id = '$customer_id'";
-        $emailResult = mysqli_query($conn, $query);
-        $emailRow = mysqli_fetch_assoc($emailResult);
-        $customerEmail = $emailRow['customer_email'];
-
-        // Compose the email message with order details
-        $subject = "Your Order Details";
-        $message = "Dear Customer,\n\n";
-        $message .= "Thank you for your order. Below are the details:\n\n";
-        $message .= "Invoice ID: $invoice_id\n";
-        $message .= "Total: $total\n";
-        $message .= "Discount: $discount%\n";
-        $message .= "Subtotal: $subtotal\n\n";
-        $message .= "Medicine Details:\n";
-        foreach ($medicines as $index => $medicine_id) {
-            $message .= "Medicine ID: $medicine_id, Quantity: $quantities[$index], Total Price: $total_prices[$index]\n";
-        }
-        $message .= "\n\nThank you for shopping with us.\n\nBest regards,\nYour Store";
-
-        // Send email
-        $headers = "From: rokib2064@gmail.com"; // Set your store's email address here
-        mail($customerEmail, $subject, $message, $headers);
-
-        // Redirect to a success page or display a success message
-        echo "<script>alert('Invoice submitted successfully and email sent to customer')</script>";
-        // echo "<script>window.location='invoices.php'</script>";
-        // End script execution after redirection
-        exit(); // End script execution after redirection
+        
+       
+       
     }
+
+    foreach ($medicines as $index => $medicine_id) {
+        $quantity = $quantities[$index] ?? '';
+        $total_price = $total_prices[$index] ?? '';
+
+        // Deduct the sold quantity from the medicine stock
+        $updateQuery = "UPDATE medicine_stock SET unit = unit - $quantity WHERE medicine_id = $medicine_id";
+        $updateResult = mysqli_query($conn, $updateQuery);
+    }
+    echo "<script>alert('Invoice submitted successfully')</script>";
+    echo "<script>window.location='invoices.php'</script>";
+    // End script execution after redirection
 }
 ?>
 
@@ -237,7 +223,8 @@ if (isset($_POST['submit'])) {
                 '<td><?php
                         $catagory = "SELECT * FROM Medicine";
                         $result = mysqli_query($conn, $catagory);
-                        ?><select class="form-control form-control-lg medicine" aria-label="Default select example" name="medicine[]" id="medicine"><option selected disabled>Select Medicine</option><?php while ($row = mysqli_fetch_assoc($result)) : ?><option value="<?php echo $row['medicine_id']; ?>"> <?php echo $row['medicine_name']; ?> </option><?php endwhile; ?></select></td>' +
+                        ?>
+                <select class="form-control form-control-lg medicine" aria-label="Default select example" name="medicine[]" id="medicine"><option selected disabled>Select Medicine</option><?php while ($row = mysqli_fetch_assoc($result)) : ?><option value="<?php echo $row['medicine_id']; ?>"> <?php echo $row['medicine_name']; ?> </option><?php endwhile; ?></select></td>' +
                 '<td><input type="text" class="form-control form-control-lg available_quantity" name="available_quantity[]" id="available_quantity" aria-describedby="sizing-addon1" placeholder="Available Quantity" disabled></td>' +
                 '<td><input type="text" class="form-control form-control-lg quantity" required="true" name="quantity[]" id="quantity" placeholder="Item Quantity"></td>' +
                 '<td><input type="text" class="form-control form-control-lg unit_price" name="unit_price[]" id="unit_price" aria-describedby="sizing-addon1" placeholder="Unit Price" disabled></td>' +

@@ -193,6 +193,7 @@
 
 .sidebar .nav-links li .sub-menu .link_name {
   display: none;
+  color: azure;
 }
 
 .sidebar.close .nav-links li .sub-menu .link_name {
