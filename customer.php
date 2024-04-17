@@ -74,7 +74,7 @@ $total_pages = ceil($total_results / $results_per_page);
                         <td>' . $result['customer_email'] . '</td>
                         <td>' . $result['customer_number'] . '</td>
                         <td>
-                            <a href="eupdate.php?updateid=' . $result['customer_id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
+                            <a href="customer_update.php?updateid=' . $result['customer_id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
                             <a href="customer.php?deleteid=' . $result['customer_id'] . '" class="text-light"><button class="btn btn-danger"><i class="bx bxs-user-x"></i></button></a>
                         </td>
                     </tr>';

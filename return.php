@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
     $invoiceId = $_POST['invoiceId'];
     $returnQuantities = $_POST['return_quantity'];
     $discount = $_POST['discount']; // Retrieve the discount value
-    echo $discount;
+
     // Loop through the return quantities
     for ($index = 0; $index < count($returnQuantities); $index++) {
         // Get the medicine ID for the current return quantity
@@ -25,6 +25,12 @@ if (isset($_POST['submit'])) {
         $query = "SELECT * FROM invoice_items WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
+
+        // Retrieve the buying price of the medicine from the database
+        $query = "SELECT pprice FROM medicine_stock WHERE medicine_id = $medicineId";
+        $result = mysqli_query($conn, $query);
+        $buying_price_row = mysqli_fetch_assoc($result);
+        $buying_price = $buying_price_row['pprice'];
 
         // Update stock quantity and unit price in medicine_stock table
         $currentStockQuery = "SELECT unit, sprice FROM medicine_stock WHERE medicine_id = $medicineId";
@@ -54,8 +60,17 @@ if (isset($_POST['submit'])) {
         $updateTotalPriceQuery = "UPDATE invoice_items SET total_price = $updatedTotalPrice WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
         mysqli_query($conn, $updateTotalPriceQuery);
 
-        // Update subtotal after return
-        $query = "UPDATE invoices SET subtotal = subtotal-($returnPrice * (1 - $discount / 100)) WHERE invoice_id = $invoiceId";
+        // Calculate the profit for the returned items considering the discount provided during sale
+        $totalSalePrice = $unitPrice * $returnQuantity; // Total sale price for the returned items
+        $discountAmount = $totalSalePrice * ($discount / 100); // Discount amount applied during sale
+        $effectiveSalePrice = $totalSalePrice - $discountAmount; // Effective sale price after discount
+        $profitPerItem = $effectiveSalePrice - ($buying_price*$returnQuantity); // Profit per item after considering discount
+        $profitToDeduct = $profitPerItem * $returnQuantity; // Total profit to deduct
+        $query = "UPDATE invoices SET profit = profit - $profitPerItem WHERE invoice_id = $invoiceId";
+        mysqli_query($conn, $query);
+
+        // Update subtotal after return considering the discount
+        $query = "UPDATE invoices SET subtotal = subtotal - ($returnPrice * (1 - $discount / 100)) WHERE invoice_id = $invoiceId";
         mysqli_query($conn, $query);
 
         // Check if sold quantity becomes 0, and delete the item from invoice_items table

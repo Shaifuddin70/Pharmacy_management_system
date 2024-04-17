@@ -6,6 +6,28 @@ include 'db_connect.php';
 $db = new dbObj();
 $conn =  $db->getConnstring();
 
+// stock notification
+$query = mysqli_query($conn, "Select *from medicine_stock");
+$total = mysqli_num_rows($query);
+$c = 0;
+if ($total != 0) {
+    while ($result =  mysqli_fetch_assoc($query)) {
+        if ($result['unit'] < 5) {
+            $c++;
+        }
+    }
+}
+// purcahse notification
+$pquery = mysqli_query($conn, "Select *from purchase_table");
+$ptotal = mysqli_num_rows($pquery);
+$p = 0;
+if ($ptotal != 0) {
+    while ($presult =  mysqli_fetch_assoc($pquery)) {
+        if ($presult['status'] == null) {
+            $p++;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <!-- Designined by CodingLab | www.youtube.com/codinglabyt -->
@@ -29,7 +51,7 @@ $conn =  $db->getConnstring();
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   <link rel="icon" type="image/x-icon" href="image/logo.jpg">
-  <title>Store Management System</title>
+  <title>Pharmacy Management System</title>
 </head>
 
 <body>
@@ -39,19 +61,25 @@ $conn =  $db->getConnstring();
       <span class="logo_name">PMS</span>
     </div>
     <ul class="nav-links">
-      <!-- <li>
-        <a href="#">
+      <li>
+        <a href="dashboard.php">
           <i class='bx bx-grid-alt'></i>
           <span class="link_name">Dashboard</span>
         </a>
         <ul class="sub-menu blank">
-          <li><a class="link_name" href="medicine_details.php">Medicine</a></li>
+          <li><a class="link_name" href="dashboard.php">Dashboard</a></li>
         </ul>
-      </li> -->
+      </li>
       <li>
         <a href="purchase_request.php">
           <i class='bx bx-grid-alt'></i>
           <span class="link_name">Purchase Request</span>
+          <?php
+                    if ($p != 0) echo '
+                        <span style="position: absolute; top: -0.1px;left: 235px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;">
+                        ' . $p . '</span>'
+
+                    ?>
         </a>
         <ul class="sub-menu blank">
           <li><a class="link_name" href="purchase_request.php">Purchase Request</a></li>
@@ -105,16 +133,21 @@ $conn =  $db->getConnstring();
           <li><a class="link_name" href="employee.php">Employee</a></li>
         </ul>
       </li>
-      <!-- <li>
-        <a href="add_order.php">
+      <li>
+        <a href="outofstock.php">
           <i class='bx bx-pie-chart-alt-2'></i>
-          <span class="link_name">Order</span>
+          <span class="link_name">Out Of Stock</span>
+          <?php
+                    if ($c != 0) echo '
+                        <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
+                        ' . $c . '</span>' ?>
         </a>
         <ul class="sub-menu blank">
-          <li><a class="link_name" href="add_order.php">Order</a></li>
+          <li><a class="link_name" href="add_order.php">Out Of Stock</a></li>
+          
         </ul>
       </li>
-      <li>
+      <!-- <li>
         <a href="invoices.php">
           <i class='bx bx-pie-chart-alt-2'></i>
           <span class="link_name">Invoices</span>
@@ -127,15 +160,17 @@ $conn =  $db->getConnstring();
         <div class="iocn-link">
           <a href="add_order.php">
             <i class='bx bx-collection'></i>
+            <span class="link_name">New Sell</span>
+          </a>
+        </div>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="invoices.php">
+            <i class='bx bx-collection'></i>
             <span class="link_name">Sales</span>
           </a>
-          <i class='bx bxs-chevron-down arrow'></i>
         </div>
-        <ul class="sub-menu">
-          <li><a class="link_name" href="add_order.php">Sales</a></li>
-          <li><a href="add_order.php">Order</a></li>
-          <li><a href="Invoices.php">Invoices</a></li>
-        </ul>
       </li>
       <li>
         <a href="return.php">

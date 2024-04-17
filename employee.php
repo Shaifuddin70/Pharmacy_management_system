@@ -8,6 +8,25 @@ if (!isset($_SESSION['admin'])) {
     exit(); // Stop further execution
 }
 
+// Check if deleteid is set and numeric
+if(isset($_GET['deleteid']) && is_numeric($_GET['deleteid'])) {
+    $id = $_GET['deleteid'];
+
+    // Prepare delete statement
+    $delete_query = "DELETE FROM `employee` WHERE id=$id";
+    $result = mysqli_query($conn, $delete_query);
+
+    if ($result) {
+        $_SESSION['status'] = "Employee deleted successfully.";
+    } else {
+        $_SESSION['status'] = "Error deleting employee: " . mysqli_error($conn);
+    }
+
+    // Redirect back to employee list page
+    header("location: employee.php");
+    exit(); // Stop further execution
+}
+
 // Pagination variables
 $results_per_page = 10; // Number of results per page
 $offset = 0; // Starting offset
@@ -48,7 +67,7 @@ $total_pages = ceil($total_results / $results_per_page);
     ?>
 
     <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-        <thead> <!-- Fixed typo here -->
+        <thead>
             <tr>
                 <th>S/N</th>
                 <th>Name</th>
@@ -58,7 +77,7 @@ $total_pages = ceil($total_results / $results_per_page);
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody> <!-- Open tbody tag here -->
+        <tbody>
             <?php
             $c = $offset + 1; // Initialize serial number based on offset
             while ($result = mysqli_fetch_assoc($data)) {
@@ -71,13 +90,13 @@ $total_pages = ceil($total_results / $results_per_page);
                     <td>' . $result['role_name'] . '</td>
                     <td>
                         <a href="eupdate.php?updateid=' . $result['id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
-                        <a href="edelete.php?deleteid=' . $result['id'] . '" class="text-light"><button class="btn btn-danger"><i class="bx bxs-user-x"></i></button></a>
+                        <a href="employee.php?deleteid=' . $result['id'] . '" class="text-light" onclick="return confirm(\'Are you sure you want to delete this employee?\')"><button class="btn btn-danger"><i class="bx bxs-user-x"></i></button></a>
                     </td>
                 </tr>';
                 $c++;
             }
             ?>
-        </tbody> <!-- Close tbody tag here -->
+        </tbody>
     </table>
 
     <?php

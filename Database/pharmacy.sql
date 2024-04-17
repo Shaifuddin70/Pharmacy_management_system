@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2024 at 01:29 AM
+-- Generation Time: Apr 17, 2024 at 01:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `customer` (
   `customer_id` int(11) NOT NULL,
-  `customer_name` varchar(11) NOT NULL,
-  `customer_email` varchar(11) NOT NULL,
-  `customer_number` varchar(11) NOT NULL,
+  `customer_name` varchar(100) NOT NULL,
+  `customer_email` varchar(100) NOT NULL,
+  `customer_number` varchar(100) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -42,7 +42,8 @@ CREATE TABLE `customer` (
 INSERT INTO `customer` (`customer_id`, `customer_name`, `customer_email`, `customer_number`, `date`) VALUES
 (1, 'Rokib', 'rokib@gmail', '01635485721', '2024-03-29 17:18:30'),
 (2, 'scot', 'wada', 'adw', '2024-03-29 17:30:28'),
-(3, 'HOME COOKED', 'rokib2064@g', '18002122120', '2024-03-30 13:50:03');
+(6, 'Shaifuddin Ahammed Rokib', 'shaifuddin70@gmail.com', '+8801635485720', '2024-04-09 20:04:10'),
+(10, 'Shaifuddin Ahammed', 'shaifuddin70@gmail.com', '01635485720', '2024-04-09 20:05:34');
 
 -- --------------------------------------------------------
 
@@ -89,11 +90,12 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`id`, `name`, `number`, `email`, `password`, `role`, `date`) VALUES
-(1, 'Shaifuddin', 1635485720, 'shaifuddin70@gmail.com', '$2y$10$VNiyKziPgCPpXyevte.0XuqXczmaH9u1TdD/vhoaoaWRRr9bkdK1.', 1, '2024-03-29 17:16:26'),
+(1, 'Shaifuddin', 1635485720, 'shaifuddin70@gmail.com', '$2y$10$m2MtgD9GRtGSrIKTNslkCuiu8AFvqTO8AnPwcaJnmz0/oVhSeB4ju', 1, '2024-03-29 17:16:26'),
 (32, 'Scott T.', 2147483647, 'rohim@gmail.com', '$2y$10$bxVgaFOWYZp02gL0TspeauLunbHwlRTvHySniJFPW3/LqeCIdIzjK', 2, '2024-03-29 17:16:26'),
 (34, 'Karim', 13654855, 'karim@gmail.com', '$2y$10$SzwaUDkCpdYybzuIQrg6/.3wrFG/SltqMBtZPMEbz3mlFuFklSDB2', 2, '2024-03-29 17:16:26'),
 (35, 'Scott T.', 2147483647, 'dardentimothy3@gmail.com', '$2y$10$8T0/7/SB8pxkpSLjqNNvvOjdzB/KgTKmGNfc2H.cBAGSv2ekd9Rvq', 2, '2024-03-29 17:16:26'),
-(36, 'HOME COOKED', 2147483647, 'awdawd@gmail.com', '$2y$10$NC9tPOUDQhKEztoqW/rmyudBxi4oAD1o2bqigvBaseObv0kKeKWRW', 2, '2024-03-30 11:42:51');
+(36, 'HOME COOKED', 2147483647, 'awdawd@gmail.com', '$2y$10$NC9tPOUDQhKEztoqW/rmyudBxi4oAD1o2bqigvBaseObv0kKeKWRW', 2, '2024-03-30 11:42:51'),
+(37, 'Seller', 165846946, 'sell@gmail.com', '$2y$10$68b2FlNX9NOaNlOKeajJpek5An4vlCDngl43dwu2kb663dZLVCXSe', 2, '2024-04-17 08:12:49');
 
 -- --------------------------------------------------------
 
@@ -103,10 +105,12 @@ INSERT INTO `employee` (`id`, `name`, `number`, `email`, `password`, `role`, `da
 
 CREATE TABLE `invoices` (
   `invoice_id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `discount` decimal(10,2) DEFAULT 0.00,
   `subtotal` decimal(10,2) NOT NULL,
+  `profit` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -114,21 +118,9 @@ CREATE TABLE `invoices` (
 -- Dumping data for table `invoices`
 --
 
-INSERT INTO `invoices` (`invoice_id`, `customer_id`, `total`, `discount`, `subtotal`, `created_at`) VALUES
-(41, 1, 6000.00, 5.00, 5700.00, '2024-04-05 12:10:33'),
-(43, 1, 500.00, 5.00, 475.00, '2024-04-05 12:14:11'),
-(44, 1, 500.00, 5.00, 475.00, '2024-04-05 16:01:50'),
-(45, 1, 50.00, 5.00, 47.50, '2024-04-05 16:04:58'),
-(46, 1, 50.00, 5.00, 47.50, '2024-04-05 16:06:07'),
-(47, 1, 550.00, 2.00, 539.00, '2024-04-05 16:07:04'),
-(48, 1, 500.00, 15.00, 425.00, '2024-04-05 16:08:27'),
-(49, 2, 750.00, 7.00, 697.50, '2024-04-05 16:09:31'),
-(50, 2, 350.00, 7.00, 325.50, '2024-04-05 16:11:57'),
-(51, 2, 900.00, 5.00, 855.00, '2024-04-05 16:27:40'),
-(52, 1, 500.00, 10.00, 450.00, '2024-04-06 14:46:14'),
-(53, 1, 3450.00, 10.00, 3105.00, '2024-04-07 19:52:28'),
-(54, 2, 500.00, 10.00, 450.00, '2024-04-07 19:54:10'),
-(55, 1, 715.00, 10.00, 643.50, '2024-04-07 23:28:22');
+INSERT INTO `invoices` (`invoice_id`, `employee_id`, `customer_id`, `total`, `discount`, `subtotal`, `profit`, `created_at`) VALUES
+(94, 1, 1, 1710.00, 5.00, 1624.50, 115, '2024-04-17 11:07:19'),
+(95, 1, 6, 2250.00, 7.00, 2092.50, 93, '2024-04-17 11:07:43');
 
 -- --------------------------------------------------------
 
@@ -149,30 +141,13 @@ CREATE TABLE `invoice_items` (
 --
 
 INSERT INTO `invoice_items` (`invoice_item_id`, `invoice_id`, `medicine_id`, `quantity`, `total_price`) VALUES
-(43, 41, 4, 10, 0.00),
-(44, 41, 4, 50, 0.00),
-(45, 43, 4, 10, 0.00),
-(46, 44, 4, 10, 0.00),
-(47, 45, 4, 1, 0.00),
-(48, 46, 4, 1, 0.00),
-(49, 47, 4, 11, 5.00),
-(50, 48, 4, 10, 5.00),
-(51, 49, 4, 10, 0.00),
-(52, 49, 4, 5, 0.00),
-(53, 50, 4, 10, 0.00),
-(54, 50, 4, 5, 0.00),
-(55, 50, 4, 2, 0.00),
-(56, 51, 4, 10, 500.00),
-(57, 51, 4, 5, 250.00),
-(58, 51, 4, 3, 150.00),
-(59, 52, 4, 10, 500.00),
-(60, 53, 4, 10, 500.00),
-(61, 53, 4, 7, 350.00),
-(62, 53, 4, 52, 2600.00),
-(63, 54, 4, 10, 500.00),
-(64, 55, 4, 5, 275.00),
-(65, 55, 5, 7, 385.00),
-(66, 55, 10, 1, 55.00);
+(143, 94, 4, 10, 550.00),
+(144, 94, 5, 10, 550.00),
+(145, 94, 8, 1, 610.00),
+(146, 95, 4, 10, 550.00),
+(147, 95, 5, 10, 550.00),
+(148, 95, 10, 10, 600.00),
+(149, 95, 5, 10, 550.00);
 
 -- --------------------------------------------------------
 
@@ -286,11 +261,12 @@ CREATE TABLE `medicine_stock` (
 --
 
 INSERT INTO `medicine_stock` (`stock_id`, `medicine_id`, `unit`, `expiry_date`, `pprice`, `sprice`, `date`, `shelf_id`) VALUES
-(1, 4, 5010, '2024-05-11', 50, 55, '2024-03-25 13:15:32', 6),
-(25, 10, 60, '2024-04-08', 50, 55, '2024-04-07 21:53:46', 6),
+(1, 4, 4956, '2024-05-11', 50, 55, '2024-03-25 13:15:32', 6),
+(25, 10, 100, '2025-09-15', 50, 60, '2024-04-07 21:53:46', 6),
 (31, 12, 500, '2024-04-08', 50, 100, '2024-04-07 22:34:34', 6),
-(33, 9, 50, '2024-05-11', 50, 55, '2024-04-07 23:07:57', 6),
-(34, 5, 100, '2024-04-08', 50, 55, '2024-04-07 23:24:49', 6);
+(33, 9, 992, '2024-05-11', 50, 55, '2024-04-07 23:07:57', 6),
+(34, 5, 93, '2024-04-08', 50, 55, '2024-04-07 23:24:49', 6),
+(35, 8, 24, '2025-10-16', 510, 610, '2024-04-15 20:35:36', 8);
 
 -- --------------------------------------------------------
 
@@ -327,7 +303,9 @@ INSERT INTO `purchase_table` (`id`, `medicine_id`, `unit`, `pprice`, `sprice`, `
 (66, 11, 10, 50, 60, '2024-04-08', 1),
 (67, 9, 50, 50, 55, '2024-04-08', 1),
 (68, 10, 50, 50, 55, '2024-04-08', 1),
-(69, 5, 100, 50, 55, '2024-04-08', 1);
+(69, 5, 100, 50, 55, '2024-04-08', 1),
+(70, 10, 50, 50, 60, '2024-04-13', 1),
+(71, 8, 100, 510, 610, '2024-04-16', 1);
 
 -- --------------------------------------------------------
 
@@ -508,7 +486,7 @@ ALTER TABLE `shelf`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `department`
@@ -520,19 +498,19 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=37;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 
 --
 -- AUTO_INCREMENT for table `medicine`
@@ -562,13 +540,13 @@ ALTER TABLE `medicine_generic`
 -- AUTO_INCREMENT for table `medicine_stock`
 --
 ALTER TABLE `medicine_stock`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `purchase_table`
 --
 ALTER TABLE `purchase_table`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `return_table`

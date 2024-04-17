@@ -16,15 +16,33 @@ if (isset($_POST['submit'])) {
     // Retrieve form data
     $customer_id = $_POST['customer'];
     $discount = $_POST['discount'];
-    $subtotal = $_POST['submit_subtotal']; // Corrected: Retrieve subtotal from form data
+    $subtotal = $_POST['submit_subtotal']; 
     $total = $_POST['submit_total'];
     $medicines = $_POST['medicine'];
     $quantities = $_POST['quantity'];
     $total_prices = $_POST['submit_total_price'];
 
+    // Calculate total profit for the invoice
+    $total_pprice=0;
+
+    foreach ($medicines as $index => $medicine_id) {
+        $quantity = $quantities[$index] ?? '';
+        $total_price = $total_prices[$index] ?? '';
+
+        // Retrieve the buying price of the medicine from the database
+        $query = "SELECT pprice FROM medicine_stock WHERE medicine_id = $medicine_id";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($result);
+        $buying_price = $row['pprice'];
+        $total_pprice+=$buying_price* $quantity;
+        // Calculate profit for the current item
+        echo $total_pprice.'" "';
+    }
+    $profit = ($subtotal - $total_pprice);
+    // Add profit to the total profit
     // Insert invoice data into the database
-    $query = "INSERT INTO invoices (customer_id, employee_id, discount, subtotal, total) 
-              VALUES ('$customer_id', '$employee_id', '$discount', '$subtotal', '$total')";
+    $query = "INSERT INTO invoices (customer_id, employee_id, discount, subtotal, total, profit) 
+              VALUES ('$customer_id', '$employee_id', '$discount', '$subtotal', '$total', '$profit')";
     $result = mysqli_query($conn, $query);
 
     if (!$result) {
@@ -47,26 +65,23 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        
-       
-       
-    }
+        // Update the medicine stock
+        foreach ($medicines as $index => $medicine_id) {
+            $quantity = $quantities[$index] ?? '';
 
-    foreach ($medicines as $index => $medicine_id) {
-        $quantity = $quantities[$index] ?? '';
-        $total_price = $total_prices[$index] ?? '';
+            // Deduct the sold quantity from the medicine stock
+            $updateQuery = "UPDATE medicine_stock SET unit = unit - $quantity WHERE medicine_id = $medicine_id";
+            $updateResult = mysqli_query($conn, $updateQuery);
+        }
 
-        // Deduct the sold quantity from the medicine stock
-        $updateQuery = "UPDATE medicine_stock SET unit = unit - $quantity WHERE medicine_id = $medicine_id";
-        $updateResult = mysqli_query($conn, $updateQuery);
+        echo "<script>alert('Invoice submitted successfully')</script>";
+        echo "<script>window.location='invoices.php'</script>";
+        // End script execution after redirection
     }
-    echo "<script>alert('Invoice submitted successfully')</script>";
-    echo "<script>window.location='invoices.php'</script>";
-    // End script execution after redirection
 }
 ?>
 
-<div class="container">
+<div class="container"  >
     <div class="title">
 
         <form action="" method="post" onsubmit="return validateForm()">
@@ -306,6 +321,42 @@ if (isset($_POST['submit'])) {
 
         return true; // Submit the form if all fields are filled
     }
+    function validateForm() {
+    var customer = document.getElementById("customer").value;
+    var discount = document.getElementById("discount").value;
+    var medicines = document.getElementsByName("medicine[]");
+    var quantities = document.getElementsByName("quantity[]");
+    var availableQuantities = document.getElementsByName("available_quantity[]");
+
+    if (customer == "" || discount == "") {
+        alert("Customer and Discount fields are required.");
+        return false; // Prevent form submission
+    }
+
+    for (var i = 0; i < medicines.length; i++) {
+        var medicine = medicines[i].value;
+        var quantity = parseInt(quantities[i].value);
+        var availableQuantity = parseInt(availableQuantities[i].value);
+
+        if (medicine == "") {
+            alert("Medicine selection cannot be empty.");
+            return false; // Prevent form submission
+        }
+
+        if (isNaN(quantity) || quantity <= 0) {
+            alert("Quantity must be a positive number.");
+            return false; // Prevent form submission
+        }
+
+        if (quantity > availableQuantity) {
+            alert("Sell quantity cannot exceed available quantity for the selected medicine.");
+            return false; // Prevent form submission
+        }
+    }
+
+    return true; // Submit the form if all fields are filled and quantities are valid
+}
+
 </script>
 
 <?php include 'nav/footer.php'; ?>

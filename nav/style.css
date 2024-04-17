@@ -138,7 +138,7 @@
 .sidebar .nav-links li a .link_name {
   font-size: 18px;
   font-weight: 400;
-  color: #fff;
+  color: #fff!important;
   transition: all 0.4s ease;
 }
 
@@ -280,7 +280,7 @@
   width: calc(100% - 260px);
   transition: all 0.5s ease;
   padding: 12px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .sidebar.close~.home-section {
@@ -289,7 +289,7 @@
 }
 
 .home-content {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   flex-wrap: wrap;
 }

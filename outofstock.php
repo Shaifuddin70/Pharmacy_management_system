@@ -21,30 +21,9 @@ if (isset($_GET['page']) && is_numeric($_GET['page'])) {
 // Calculate the offset
 $offset = ($page - 1) * $results_per_page;
 
-$cq = "";
-$iq = "";
-$brand = "";
-$generic = "";
-
-if (isset($_POST['submit'])) {
-    if (!empty($_POST['brand'])) {
-        $brand_id = $_POST['brand'];
-
-        $q = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM medicine_brand WHERE brand_id=$brand_id"));
-        $brand_name = $q['brand_name'];
-        $cq = " AND b.brand_name='$brand_name'";
-    }
-    if (!empty($_POST['generic'])) {
-        $generic_id = $_POST['generic'];
-
-        $q = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM medicine_generic WHERE generic_id=$generic_id"));
-        $generic_name = $q['generic_name'];
-        $iq = " AND g.generic_name='$generic_name'";
-    }
-}
 
 // Count total records
-$count_query = "SELECT COUNT(*) AS total FROM medicine ";
+$count_query = "SELECT COUNT(*) AS total FROM medicine_stock WHERE unit < 5"; // Updated query
 $count_result = mysqli_query($conn, $count_query);
 $count_row = mysqli_fetch_assoc($count_result);
 $total_records = $count_row['total'];
@@ -52,25 +31,19 @@ $total_records = $count_row['total'];
 // Calculate total pages
 $total_pages = ceil($total_records / $results_per_page);
 
-$whereClause = "";
-if (!empty($cq) || !empty($iq)) {
-    $whereClause = "WHERE 1 $cq $iq";
-}
+
 
 // Fetch data with pagination
-// Fetch data with pagination
-$sql = "
-        SELECT m.medicine_name, m.catagory_id, m.brand_id, m.generic_id, c.catagory_name, b.brand_name, g.generic_name, s.unit, s.pprice, s.sprice, DATE(s.expiry_date) AS expiry_date, r.shelf_number
+$sql = "SELECT m.medicine_name, m.catagory_id, m.brand_id, m.generic_id, c.catagory_name, b.brand_name, g.generic_name, s.unit, s.pprice, s.sprice, DATE(s.expiry_date) AS expiry_date, r.shelf_number
         FROM medicine_stock s
         JOIN medicine m ON s.medicine_id = m.medicine_id
         JOIN medicine_catagory c ON m.catagory_id = c.catagory_id
         JOIN medicine_brand b ON m.brand_id = b.brand_id
         JOIN medicine_generic g ON m.generic_id = g.generic_id
         LEFT JOIN shelf r ON s.shelf_id = r.shelf_id
-        $whereClause
+        WHERE s.unit < 5 
         LIMIT $offset, $results_per_page
 ";
-
 $data = mysqli_query($conn, $sql);
 
 ?>
@@ -91,36 +64,8 @@ $data = mysqli_query($conn, $sql);
 </head>
 
 <div class="container">
-    <h1 style="margin-bottom :50px;">All Stock Items</h1>
-    <!-- <button onclick="purchaseReport()" class="btn btn-info"> Create Report</button> -->
-    <a href="purchase.php"><button class="btn btn-primary" >Create Purchase Request</button></a>
-    <form method="post">
-        <div class="input-group date" style="margin-left:250px;bottom: 35px;font-weight: bold;">
-            <label for="brand" class="col-1 col-form-label">Brand: </label>
-            <?php
-            $brand_query = "SELECT * FROM medicine_brand";
-            $brand_result = mysqli_query($conn, $brand_query);
-            ?>
-            <select class="inputbox" aria-label="Default select example" name="brand" id="brand">
-                <option selected disabled>Select Brand</option>
-                <?php while ($brand_row = mysqli_fetch_assoc($brand_result)) : ?>
-                    <option value="<?php echo $brand_row['brand_id']; ?>"> <?php echo $brand_row['brand_name']; ?> </option>
-                <?php endwhile; ?>
-            </select>
-            <label for="generic" class="col-1 col-form-label">Generic: </label>
-            <?php
-            $generic_query = "SELECT * FROM medicine_generic";
-            $generic_result = mysqli_query($conn, $generic_query);
-            ?>
-            <select class="inputbox" aria-label="Default select example" name="generic" id="generic">
-                <option selected disabled>Select Generic</option>
-                <?php while ($generic_row = mysqli_fetch_assoc($generic_result)) : ?>
-                    <option value="<?php echo $generic_row['generic_id']; ?>"> <?php echo $generic_row['generic_name']; ?> </option>
-                <?php endwhile; ?>
-            </select>
-            <input type="submit" class="btn btn-info" name="submit" value="Filter">
-        </div>
-    </form>
+    <h1 >All Stock Items</h1>
+
     
 
     <div id="table">
@@ -135,10 +80,10 @@ $data = mysqli_query($conn, $sql);
                     <th>Brand</th>
                     <th>Generic </th>
                     <th>Quantity</th>
-                    <th>Purchase Price</th>
-                    <th>Sell Price</th>
                     <th>Expiry Date</th>
                     <th>Shelf</th>
+                    <th>Action</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -154,10 +99,9 @@ $data = mysqli_query($conn, $sql);
                         <td>' . $result['brand_name'] . '</td>
                         <td>' . $result['generic_name'] . '</td>
                         <td>' . $result['unit'] . '</td>
-                        <td>' . $result['pprice'] . '</td>
-                        <td>' . $result['sprice'] . '</td>
                         <td>' . $result['expiry_date'] . '</td>
                         <td>' . $result['shelf_number'] . '</td>
+                        <td><a href="purchase.php" class="text-light"><button class="btn btn-primary">Buy Now</button></a></td>
                     </tr>';
                         $c++;
                     }
