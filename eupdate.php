@@ -43,7 +43,7 @@ $fetch = mysqli_fetch_array($query);
                         $catagory = "SELECT * FROM role";
                         $result = mysqli_query($conn, $catagory);
                         ?>
-                    <select class="form-control form-control-lg" aria-label="Default select example" required="true" name="role" id="role">
+                    <select class="form-control form-control-lg" aria-label="Default select example" value="<?php echo $row['role_id']; ?>" required="true" name="role" id="role">
                         <option selected disabled><?php echo $rfetch['role_name']; ?></option>
                         <?php while ($row = mysqli_fetch_assoc($result)) : ?>
                             <option value="<?php echo $row['role_id']; ?>"> <?php echo $row['role_name']; ?> </option>

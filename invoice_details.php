@@ -56,7 +56,7 @@ body {
 </style>
 
 <!-- Print Button -->
-<button class="btn btn-primary" onclick="window.print()">Print Invoice</button>
+<!-- <button class="btn btn-primary" onclick="window.print()">Print Invoice</button> -->
 
 <div class="container">
     <div class="title">

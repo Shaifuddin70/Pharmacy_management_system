@@ -1,9 +1,9 @@
 <?php
 include 'nav/nav.php';
-if (isset($_SESSION['admin'])) {
-} else {
-    echo "<script>alert('Unautorized Access')</script>";
+if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
+    echo "<script>alert('Unauthorized Access')</script>";
     echo "<script>window.location='index.php'</script>";
+    exit();
 }
 ?>
 <div class="container">

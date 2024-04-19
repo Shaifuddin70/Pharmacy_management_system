@@ -1,280 +1,259 @@
 <?php
-include 'nav/nav.php';
+ob_start(); // Start output buffering
+session_start();
 
-if (isset($_SESSION['stuff'])) {
-} elseif (isset($_SESSION['admin'])) {
-} else {
-    echo "<script>alert('Unauthorized Access')</script>";
-    echo "<script>window.location='index.php'</script>";
-    exit; // Stop execution if unauthorized
-}
-$discount = 0;
-// Check if the form is submitted
-if (isset($_POST['submit'])) {
-    // Retrieve form data
-    $invoiceId = $_POST['invoiceId'];
-    $returnQuantities = $_POST['return_quantity'];
-    $discount = $_POST['discount']; // Retrieve the discount value
-    echo $discount;
-    // Loop through the return quantities
-    for ($index = 0; $index < count($returnQuantities); $index++) {
-        // Get the medicine ID for the current return quantity
-        $medicineId = $_POST['medicine_id'][$index];
+include 'db_connect.php';
+$db = new dbObj();
+$conn =  $db->getConnstring();
 
-        // Get the corresponding invoice item details for the current medicine
-        $query = "SELECT * FROM invoice_items WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
-        $result = mysqli_query($conn, $query);
-        $row = mysqli_fetch_assoc($result);
-
-        // Update stock quantity and unit price in medicine_stock table
-        $currentStockQuery = "SELECT unit, sprice FROM medicine_stock WHERE medicine_id = $medicineId";
-        $currentStockResult = mysqli_query($conn, $currentStockQuery);
-        $currentStockRow = mysqli_fetch_assoc($currentStockResult);
-        $currentStock = $currentStockRow['unit'];
-        $unitPrice = $currentStockRow['sprice'];
-        $returnQuantity = $returnQuantities[$index]; // Get the return quantity for the current medicine
-        $updatedStock = $currentStock + $returnQuantity;
-        $updateStockQuery = "UPDATE medicine_stock SET unit = $updatedStock WHERE medicine_id = $medicineId";
-        mysqli_query($conn, $updateStockQuery);
-
-        // Update sold quantity
-        $currentSold = $row['quantity'];
-        $updatedSold = $currentSold - $returnQuantity;
-        $updateSoldQuery = "UPDATE invoice_items SET quantity = $updatedSold WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
-        mysqli_query($conn, $updateSoldQuery);
-
-        // Calculate return price and update total price in invoices table
-        $returnPrice = $returnQuantity * $unitPrice;
-        $query = "UPDATE invoices SET total = total - $returnPrice WHERE invoice_id = $invoiceId";
-        mysqli_query($conn, $query);
-
-        // Update total price in invoice_items table
-        $currentTotalPrice = $row['total_price'];
-        $updatedTotalPrice = $currentTotalPrice - $returnPrice;
-        $updateTotalPriceQuery = "UPDATE invoice_items SET total_price = $updatedTotalPrice WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
-        mysqli_query($conn, $updateTotalPriceQuery);
-
-        // Update subtotal after return
-        $query = "UPDATE invoices SET subtotal = subtotal-($returnPrice * (1 - $discount / 100)) WHERE invoice_id = $invoiceId";
-        mysqli_query($conn, $query);
-      
-
-        // Check if sold quantity becomes 0, and delete the item from invoice_items table
-        if ($updatedSold == 0) {
-            $deleteQuery = "DELETE FROM invoice_items WHERE invoice_id = $invoiceId AND medicine_id = $medicineId";
-            mysqli_query($conn, $deleteQuery);
-        }
-        // Check if there are any invoice items left
-        $query = "SELECT COUNT(*) as count FROM invoice_items WHERE invoice_id = $invoiceId";
-        $result = mysqli_query($conn, $query);
-        $row = mysqli_fetch_assoc($result);
-        $invoiceItemCount = $row['count'];
-
-        if ($invoiceItemCount == 0) {
-            // Delete the invoice if there are no invoice items left
-            $deleteInvoiceQuery = "DELETE FROM invoices WHERE invoice_id = $invoiceId";
-            mysqli_query($conn, $deleteInvoiceQuery);
+// stock notification
+$query = mysqli_query($conn, "Select *from medicine_stock");
+$total = mysqli_num_rows($query);
+$c = 0;
+if ($total != 0) {
+    while ($result =  mysqli_fetch_assoc($query)) {
+        if ($result['unit'] < 5) {
+            $c++;
         }
     }
-
-    // Optionally, log the return transaction in a separate table
-    // Insert code here to log the return transaction
-
-    // Redirect to a success page or show a success message
-    echo "<script>alert('Medicine return successful.')</script>";
-    echo "<script>window.location='invoices.php'</script>";
-    exit;
+}
+// purcahse notification
+$pquery = mysqli_query($conn, "Select *from purchase_table");
+$ptotal = mysqli_num_rows($pquery);
+$p = 0;
+if ($ptotal != 0) {
+    while ($presult =  mysqli_fetch_assoc($pquery)) {
+        if ($presult['status'] == null) {
+            $p++;
+        }
+    }
 }
 ?>
+<!DOCTYPE html>
+<!-- Designined by CodingLab | www.youtube.com/codinglabyt -->
+<html lang="en" dir="ltr">
 
-<form method="post">
-    <div class="container">
-        <h1>Return Medicine</h1>
-        <div class="customer">
-            <h5>Select Invoice ID: </h5>
-            <label for="invoiceId"></label>
-            <select class="form-control form-control col-3 ml-2 mb-2" id="invoiceId" name="invoiceId">
-                <option value="" selected disabled>Select Invoice ID</option>
-                <?php
-                // Fetch unique invoice IDs from the database
-                $query = "SELECT DISTINCT invoice_id FROM invoices";
-                $result = mysqli_query($conn, $query);
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<option value='" . $row['invoice_id'] . "'>" . $row['invoice_id'] . "</option>";
-                }
-                ?>
-            </select>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <table id="orderDetailsTable" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Medicine Name</th>
-                    <th>Sold Quantity</th>
-                    <th>Return Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Return Price</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-        <div class="h5 col-sm-12 text-right ">
-            Discount (%): <span id="discount"><?php echo $discount; ?></span>
-        </div>
-        <div class="h5 col-sm-12 text-right ">
-            Total Return Price: <span id="totalReturnPrice">0.00</span>
-        </div>
-        <div class="button">
-            <button class="btn btn-primary" type="submit" name="submit">SUBMIT</button>
-        </div>
+  <!----======== CSS ======== -->
+  <link rel="stylesheet" href="nav/style.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!----===== Iconscout CSS ===== -->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="Jquery/jquery.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <link rel="icon" type="image/x-icon" href="image/logo.jpg">
+  <title>Pharmacy Management System</title>
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <img src="image/logo.jpg" alt="profileImg" style="height: 40px; width: 40px;     border-radius: 50px; margin-right: 10px; margin-left: 20px;">
+      <span class="logo_name">PMS</span>
     </div>
-</form>
+    <ul class="nav-links">
+      <li>
+        <a href="dashboard.php">
+          <i class='bx bx-grid-alt'></i>
+          <span class="link_name">Dashboard</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="dashboard.php">Dashboard</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="purchase_request.php">
+          <i class='bx bx-grid-alt'></i>
+          <span class="link_name">Purchase Request</span>
+          <?php
+                    if ($p != 0) echo '
+                        <span style="position: absolute; top: -0.1px;left: 235px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;">
+                        ' . $p . '</span>'
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Initialize discount variable
-        var discount = 0;
+                    ?>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="purchase_request.php">Purchase Request</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="medicine_details.php">
+            <i class='bx bx-collection'></i>
+            <span class="link_name">Medicine</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="medicine_details.php">Medicine</a></li>
+          <li><a href="catagory.php">Catagory</a></li>
+          <li><a href="brand.php">Brand</a></li>
+          <li><a href="generic.php">Generic</a></li>
+        </ul>
+      </li>
+      <!-- <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-book-alt'></i>
+            <span class="link_name">Posts</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Posts</a></li>
+          <li><a href="#">Web Design</a></li>
+          <li><a href="#">Login Form</a></li>
+          <li><a href="#">Card Design</a></li>
+        </ul>
+      </li>-->
+      <li>
+        <a href="customer.php">
+          <i class='bx bx-line-chart'></i>
+          <span class="link_name">Customer</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="customer.php">Customer</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="employee.php">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="link_name">Employee</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="employee.php">Employee</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="outofstock.php">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="link_name">Out Of Stock</span>
+          <?php
+                    if ($c != 0) echo '
+                        <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
+                        ' . $c . '</span>' ?>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="add_order.php">Out Of Stock</a></li>
+          
+        </ul>
+      </li>
+      <!-- <li>
+        <a href="invoices.php">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="link_name">Invoices</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="Invoices.php">Invoices</a></li>
+        </ul>
+      </li> -->
+      <li>
+        <div class="iocn-link">
+          <a href="add_order.php">
+            <i class='bx bx-collection'></i>
+            <span class="link_name">New Sell</span>
+          </a>
+        </div>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="invoices.php">
+            <i class='bx bx-collection'></i>
+            <span class="link_name">Sales</span>
+          </a>
+        </div>
+      </li>
+      <li>
+        <a href="return.php">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="link_name">Return</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="return.php">Return</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="stock.php">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="link_name">Stock</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="stock.php">Stock</a></li>
+        </ul>
+      </li>
+    
+      <!-- <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-plug'></i>
+            <span class="link_name">Plugins</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Plugins</a></li>
+          <li><a href="#">UI Face</a></li>
+          <li><a href="#">Pigments</a></li>
+          <li><a href="#">Box Icons</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-compass'></i>
+          <span class="link_name">Explore</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Explore</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-history'></i>
+          <span class="link_name">History</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">History</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-cog'></i>
+          <span class="link_name">Setting</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Setting</a></li>
+        </ul>
+      </li> -->
+      <li>
+        <div class="profile-details">
+          <div class="profile-content">
+            <img src="image/user.png" alt="profileImg">
+          </div>
+          <div class="name-job">
+            <div class="profile_name"><a class="link_name" href="profile.php"><?php
 
-        // Update discount value whenever it changes
-        $('#discount').change(function() {
-            discount = parseFloat($(this).text()); // Update discount value
-            // Update total return price
-            var totalReturnPrice = calculateTotalReturnPrice();
-            $('#totalReturnPrice').text(totalReturnPrice.toFixed(2));
-        });
+                                      $query = mysqli_query($conn, "SELECT * FROM `employee` WHERE `id`='$_SESSION[eid]'");
+                                      $fetch = mysqli_fetch_array($query);
+                                      echo $fetch['name'];
+                                      ?></a></div>
 
-        // Event listener for form submission
-        $('form').submit(function(event) {
-            // Add a hidden input field to store the discount value before submitting the form
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'discount',
-                value: discount
-            }).appendTo($(this));
-        });
-
-
-        // Function to calculate return price
-        function calculateReturnPrice(returnQuantity, unitPrice) {
-            return returnQuantity * unitPrice;
-        }
-
-        // Function to calculate total return price
-        function calculateTotalReturnPrice() {
-            var totalReturnPrice = 0;
-            $('input[name="return_quantity[]"]').each(function() {
-                var returnQuantity = parseInt($(this).val());
-                var unitPrice = parseFloat($(this).closest('tr').find('td:eq(3)').text());
-                var returnPrice = calculateReturnPrice(returnQuantity, unitPrice);
-                totalReturnPrice += returnPrice;
-            });
-            return totalReturnPrice * (1 - discount / 100); // Apply discount to the total return price
-        }
-
-        // Event listener for any return quantity input field
-        $(document).on('input', 'input[name="return_quantity[]"]', function() {
-            var returnQuantity = parseInt($(this).val());
-            var maxReturnQuantity = parseInt($(this).attr('max'));
-            if (returnQuantity > maxReturnQuantity) {
-                alert('Return quantity cannot be greater than the sold quantity.');
-                $(this).val(maxReturnQuantity);
-                returnQuantity = maxReturnQuantity;
-            }
-
-            // Update return price for this row
-            var unitPrice = parseFloat($(this).closest('tr').find('td:eq(3)').text());
-            var returnPrice = calculateReturnPrice(returnQuantity, unitPrice);
-            $(this).closest('tr').find('td:eq(4)').text(returnPrice.toFixed(2));
-
-            // Update total return price
-            var totalReturnPrice = calculateTotalReturnPrice();
-            $('#totalReturnPrice').text(totalReturnPrice.toFixed(2));
-        });
-
-        // Event listener for change in discount
-        $('#discount').change(function() {
-            discount = parseFloat($(this).val()); // Update discount value
-            // Update total return price
-            var totalReturnPrice = calculateTotalReturnPrice();
-            $('#totalReturnPrice').text(totalReturnPrice.toFixed(2));
-        });
-
-        $('#invoiceId').change(function() {
-            var invoiceId = $(this).val();
-
-            if (invoiceId) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'ajax/get_discount.php',
-                    data: {
-                        invoiceId: invoiceId
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#discount').text(data.discount); // Update discount value
-                        discount = data.discount; // Set initial discount value
-                        // Update total return price
-                        var totalReturnPrice = calculateTotalReturnPrice();
-                        $('#totalReturnPrice').text(totalReturnPrice.toFixed(2));
-                    },
-                    error: function(xhr, status, error) {
-                        // Display detailed error message
-                        var errorMessage = xhr.status + ': ' + xhr.statusText;
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            errorMessage = xhr.responseJSON.error;
-                        }
-                        alert('Error fetching discount: ' + errorMessage);
-                    }
-                });
-
-                // Fetch order details based on selected invoice ID
-                $.ajax({
-                    type: 'POST',
-                    url: 'ajax/get_order_details.php',
-                    data: {
-                        invoiceId: invoiceId
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        // Clear existing table rows
-                        $('#orderDetailsTable tbody').empty();
-
-                        // Add new rows based on fetched data
-                        $.each(data, function(index, item) {
-                            $('#orderDetailsTable tbody').append(
-                                '<tr>' +
-                                '<td>' + item.medicine_name + '</td>' +
-                                '<td>' + item.sold_quantity + '</td>' +
-                                '<td><input type="number" min="0" max="' + item.sold_quantity + '" name="return_quantity[]" value="0" class="form-control"></td>' +
-                                '<td>' + item.unit_price + '</td>' +
-                                '<td>0.00</td>' +
-                                '<input type="hidden" name="medicine_id[]" value="' + item.medicine_id + '">' +
-                                '</tr>'
-                            );
-                        });
-
-                        // Update total return price
-                        var totalReturnPrice = calculateTotalReturnPrice();
-                        $('#totalReturnPrice').text(totalReturnPrice.toFixed(2));
-                    },
-                    error: function(xhr, status, error) {
-                        // Display detailed error message
-                        var errorMessage = xhr.status + ': ' + xhr.statusText;
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            errorMessage = xhr.responseJSON.error;
-                        }
-                        alert('Error fetching invoice details: ' + errorMessage);
-                    }
-                });
-            } else {
-                // Clear the table if no invoice ID is selected
-                $('#orderDetailsTable tbody').empty();
-                $('#totalReturnPrice').text('0.00'); // Clear total return price
-            }
-        });
-    });
-</script>
-
-<?php include 'nav/footer.php'; ?>
+          </div>
+          <a href="logout.php">
+            <i class='bx bx-log-out'></i></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <section class="home-section">
+    <div class="home-content">
+      <i class='bx bx-menu'></i>
+    </div>

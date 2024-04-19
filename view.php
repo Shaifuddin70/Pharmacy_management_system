@@ -16,8 +16,6 @@
                 <th>Brand</th>
                 <th>Category</th>
                 <th>Generic Name</th>
-                <th>Expiry Date</th>
-                <th>Unit Price</th>
                 <th>Operation</th>
             </tr>
         </thead>
@@ -34,7 +32,7 @@
             $id = isset($_GET['selectid']) ? $_GET['selectid'] : null;
 
             // Fetch data with pagination
-            $query = "SELECT medicine.medicine_id, medicine.medicine_name, medicine.expiry_date, medicine.unit_price, medicine_catagory.catagory_name, medicine_brand.brand_name, medicine_generic.generic_name 
+            $query = "SELECT medicine.medicine_id, medicine.medicine_name,medicine_catagory.catagory_name, medicine_brand.brand_name, medicine_generic.generic_name 
                       FROM medicine
                       JOIN medicine_brand ON medicine_brand.brand_id = medicine.brand_id
                       JOIN medicine_catagory ON medicine_catagory.catagory_id = medicine.catagory_id
@@ -60,8 +58,6 @@
                         <td>' . $result['brand_name'] . '</td>
                         <td>' . $result['catagory_name'] . '</td>
                         <td>' . $result['generic_name'] . '</td>
-                        <td>' . date('Y-m-d', strtotime($result['expiry_date'])) . '</td>
-                        <td>' . $result['unit_price'] . '</td>
                         <td>
                             <a href="update.php?updateid=' . $result['medicine_id'] . '" class="text-light">
                                 <button class="btn btn-primary">Update</button>

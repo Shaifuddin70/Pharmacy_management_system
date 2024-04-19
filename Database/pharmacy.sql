@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 17, 2024 at 01:44 PM
+-- Generation Time: Apr 19, 2024 at 09:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,10 +40,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `customer_name`, `customer_email`, `customer_number`, `date`) VALUES
-(1, 'Rokib', 'rokib@gmail', '01635485721', '2024-03-29 17:18:30'),
-(2, 'scot', 'wada', 'adw', '2024-03-29 17:30:28'),
-(6, 'Shaifuddin Ahammed Rokib', 'shaifuddin70@gmail.com', '+8801635485720', '2024-04-09 20:04:10'),
-(10, 'Shaifuddin Ahammed', 'shaifuddin70@gmail.com', '01635485720', '2024-04-09 20:05:34');
+(1, 'chaity', 'chaity@gmail.com', '01635485721', '2024-03-29 17:18:30'),
+(2, 'scot', 'scot@gmail.com', '1326548654', '2024-03-29 17:30:28');
 
 -- --------------------------------------------------------
 
@@ -90,12 +88,10 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`id`, `name`, `number`, `email`, `password`, `role`, `date`) VALUES
-(1, 'Shaifuddin', 1635485720, 'shaifuddin70@gmail.com', '$2y$10$m2MtgD9GRtGSrIKTNslkCuiu8AFvqTO8AnPwcaJnmz0/oVhSeB4ju', 1, '2024-03-29 17:16:26'),
-(32, 'Scott T.', 2147483647, 'rohim@gmail.com', '$2y$10$bxVgaFOWYZp02gL0TspeauLunbHwlRTvHySniJFPW3/LqeCIdIzjK', 2, '2024-03-29 17:16:26'),
-(34, 'Karim', 13654855, 'karim@gmail.com', '$2y$10$SzwaUDkCpdYybzuIQrg6/.3wrFG/SltqMBtZPMEbz3mlFuFklSDB2', 2, '2024-03-29 17:16:26'),
-(35, 'Scott T.', 2147483647, 'dardentimothy3@gmail.com', '$2y$10$8T0/7/SB8pxkpSLjqNNvvOjdzB/KgTKmGNfc2H.cBAGSv2ekd9Rvq', 2, '2024-03-29 17:16:26'),
-(36, 'HOME COOKED', 2147483647, 'awdawd@gmail.com', '$2y$10$NC9tPOUDQhKEztoqW/rmyudBxi4oAD1o2bqigvBaseObv0kKeKWRW', 2, '2024-03-30 11:42:51'),
-(37, 'Seller', 165846946, 'sell@gmail.com', '$2y$10$68b2FlNX9NOaNlOKeajJpek5An4vlCDngl43dwu2kb663dZLVCXSe', 2, '2024-04-17 08:12:49');
+(1, 'Tahira', 176548526, 'chaity@gmail.com', '$2y$10$8d4sVVLZb.zyG1g12YASE.4GeFjcZOK5wZdpBlDtkpYjCyQDUnC22', 1, '2024-03-29 17:16:26'),
+(32, 'Rohim', 2147483647, 'rohim@gmail.com', '$2y$10$OmDy9R0yxrJRQ/ZXyYWSo.z.jjDlKCCJNLbT.SfE5LCn0isrmyAtK', 2, '2024-03-29 17:16:26'),
+(34, 'Karim', 165842563, 'karim@gmail.com', '$2y$10$CRDucZaJ4MbUnv0c1ZCqA.JNI2aBMI/v1FsxZqnrBbQH9ufe1UjXe', 2, '2024-03-29 17:16:26'),
+(35, 'Salim', 168569542, 'salim@gmail.com', '$2y$10$uoTQM7kssEOjkZcjmkh.4eksOxyML9U0QMWaqLuK1k2HhTjNcMH02', 2, '2024-03-29 17:16:26');
 
 -- --------------------------------------------------------
 
@@ -119,8 +115,11 @@ CREATE TABLE `invoices` (
 --
 
 INSERT INTO `invoices` (`invoice_id`, `employee_id`, `customer_id`, `total`, `discount`, `subtotal`, `profit`, `created_at`) VALUES
-(94, 1, 1, 1710.00, 5.00, 1624.50, 115, '2024-04-17 11:07:19'),
-(95, 1, 6, 2250.00, 7.00, 2092.50, 93, '2024-04-17 11:07:43');
+(100, 1, 2, 4950.00, 5.00, 4702.50, 203, '2024-04-17 12:42:33'),
+(101, 1, 1, 4410.00, 5.00, 4189.50, 430, '2024-04-17 13:11:51'),
+(103, 1, 1, 825.00, 5.00, 783.75, 34, '2024-04-17 15:47:38'),
+(104, 1, 1, 5400.00, 5.00, 5130.00, 630, '2024-04-17 15:49:18'),
+(105, 1, 2, 1925.00, 5.00, 1828.75, -171, '2024-04-19 18:59:01');
 
 -- --------------------------------------------------------
 
@@ -141,13 +140,16 @@ CREATE TABLE `invoice_items` (
 --
 
 INSERT INTO `invoice_items` (`invoice_item_id`, `invoice_id`, `medicine_id`, `quantity`, `total_price`) VALUES
-(143, 94, 4, 10, 550.00),
-(144, 94, 5, 10, 550.00),
-(145, 94, 8, 1, 610.00),
-(146, 95, 4, 10, 550.00),
-(147, 95, 5, 10, 550.00),
-(148, 95, 10, 10, 600.00),
-(149, 95, 5, 10, 550.00);
+(154, 100, 4, 90, 4950.00),
+(155, 101, 4, 10, 550.00),
+(156, 101, 5, 40, 2150.00),
+(157, 101, 8, 1, 610.00),
+(158, 101, 10, 10, 600.00),
+(159, 101, 12, 5, 500.00),
+(161, 103, 4, 10, 550.00),
+(163, 103, 5, 5, 275.00),
+(164, 104, 10, 90, 5400.00),
+(165, 105, 5, 40, 1925.00);
 
 -- --------------------------------------------------------
 
@@ -174,7 +176,9 @@ INSERT INTO `medicine` (`medicine_id`, `catagory_id`, `medicine_name`, `brand_id
 (8, 4, 'Adreline', 2, 2, '2024-03-29 16:17:26'),
 (9, 2, 'Ace Plus', 1, 6, '2024-03-29 16:18:33'),
 (10, 5, 'MG+', 2, 2, '2024-03-30 12:57:22'),
-(12, 4, 'Tasty', 2, 2, '2024-04-07 22:33:39');
+(12, 4, 'Tasty', 2, 2, '2024-04-07 22:33:39'),
+(13, 2, 'test', 1, 2, '2024-04-17 15:46:33'),
+(14, 1, 'test1', 1, 1, '2024-04-19 18:53:31');
 
 -- --------------------------------------------------------
 
@@ -261,12 +265,12 @@ CREATE TABLE `medicine_stock` (
 --
 
 INSERT INTO `medicine_stock` (`stock_id`, `medicine_id`, `unit`, `expiry_date`, `pprice`, `sprice`, `date`, `shelf_id`) VALUES
-(1, 4, 4956, '2024-05-11', 50, 55, '2024-03-25 13:15:32', 6),
-(25, 10, 100, '2025-09-15', 50, 60, '2024-04-07 21:53:46', 6),
-(31, 12, 500, '2024-04-08', 50, 100, '2024-04-07 22:34:34', 6),
+(1, 4, 4868, '2024-05-11', 50, 55, '2024-03-25 13:15:32', 6),
+(25, 10, 100, '2024-04-30', 500, 650, '2024-04-07 21:53:46', 7),
+(31, 12, 495, '2024-04-08', 50, 100, '2024-04-07 22:34:34', 6),
 (33, 9, 992, '2024-05-11', 50, 55, '2024-04-07 23:07:57', 6),
-(34, 5, 93, '2024-04-08', 50, 55, '2024-04-07 23:24:49', 6),
-(35, 8, 24, '2025-10-16', 510, 610, '2024-04-15 20:35:36', 8);
+(34, 5, 165, '2024-05-11', 50, 60, '2024-04-07 23:24:49', 6),
+(35, 8, 104, '2024-04-17', 510, 620, '2024-04-15 20:35:36', 7);
 
 -- --------------------------------------------------------
 
@@ -289,9 +293,6 @@ CREATE TABLE `purchase_table` (
 --
 
 INSERT INTO `purchase_table` (`id`, `medicine_id`, `unit`, `pprice`, `sprice`, `date`, `status`) VALUES
-(55, 5, 100, 0, 0, '2024-04-08', 1),
-(56, 9, 100, 0, 0, '2024-04-08', 1),
-(57, 8, 50, 0, 0, '2024-04-08', 1),
 (58, 9, 100, 40, 50, '2024-04-08', 1),
 (59, 10, 10, 35, 50, '2024-04-08', 1),
 (60, 9, 100, 40, 10, '2024-04-08', 1),
@@ -305,7 +306,10 @@ INSERT INTO `purchase_table` (`id`, `medicine_id`, `unit`, `pprice`, `sprice`, `
 (68, 10, 50, 50, 55, '2024-04-08', 1),
 (69, 5, 100, 50, 55, '2024-04-08', 1),
 (70, 10, 50, 50, 60, '2024-04-13', 1),
-(71, 8, 100, 510, 610, '2024-04-16', 1);
+(71, 8, 100, 510, 610, '2024-04-16', 1),
+(72, 8, 100, 510, 620, '2024-04-17', 1),
+(73, 10, 100, 500, 650, '2024-04-17', 1),
+(74, 5, 100, 50, 60, '2024-04-20', 1);
 
 -- --------------------------------------------------------
 
@@ -504,19 +508,19 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
 
 --
 -- AUTO_INCREMENT for table `medicine`
 --
 ALTER TABLE `medicine`
-  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `medicine_brand`
@@ -546,7 +550,7 @@ ALTER TABLE `medicine_stock`
 -- AUTO_INCREMENT for table `purchase_table`
 --
 ALTER TABLE `purchase_table`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `return_table`

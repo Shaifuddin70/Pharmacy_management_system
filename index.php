@@ -51,15 +51,12 @@ if (isset($_POST['login'])) {
         $_SESSION['eid'] = $check['id'];
         if (isset($check)) {
             if ($check['role'] == '1') {
-                header("location:medicine_details.php");
+                header("location:dashboard.php");
                 $_SESSION['admin'] = true;
             } else if ($check['role'] == '2') {
                 $_SESSION['stuff'] = true;
                 header("location:stock.php");
-            } elseif ($check['role'] == '3') {
-                $_SESSION['employee'] = true;
-                header("location:employeepanel.php");
-            }
+            } 
         }
     } else {
         echo "<script>alert('Wrong Credentials')</script>";

@@ -1,9 +1,10 @@
 <?php
 include 'nav/nav.php';
 
-if (!isset($_SESSION['admin'])) {
+if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
     echo "<script>alert('Unauthorized Access')</script>";
     echo "<script>window.location='index.php'</script>";
+    exit();
 }
 
 // Handle form submission
@@ -13,11 +14,10 @@ if (isset($_POST['submit'])) {
     $catagory_id = $_POST['catagory_id'];
     $brand_id = $_POST['brand_id'];
     $generic_id = $_POST['generic_id'];
-    $unit_price = $_POST['unit_price'];
-    $expiry_date = $_POST['expiry_date'];
+ 
 
     // Perform database insertion
-    $query = "INSERT INTO medicine (medicine_name, catagory_id, brand_id, generic_id, unit_price, expiry_date) VALUES ('$medicine_name',' $catagory_id', '$brand_id', '$generic_id', '$unit_price', '$expiry_date')";
+    $query = "INSERT INTO medicine (medicine_name, catagory_id, brand_id, generic_id) VALUES ('$medicine_name',' $catagory_id', '$brand_id', '$generic_id')";
     $query_run = mysqli_query($conn, $query);
 
     // Check if insertion was successful
@@ -86,14 +86,7 @@ if (isset($_POST['submit'])) {
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td><label for="unit_price">Unit Price:</label></td>
-                    <td><input type="text" class="form-control form-control-lg" required="true" name="unit_price" id="unit_price" placeholder="Unit Price"></td>
-                </tr>
-                <tr>
-                    <td><label for="expiry_date">Expiry Date:</label></td>
-                    <td><input type="date" class="form-control form-control-lg" required="true" name="expiry_date" id="expiry_date" placeholder="Expiry Date"></td>
-                </tr>
+               
             </table>
             <div class="button">
                 <button class="btn btn-primary" type="submit" name="submit">SUBMIT</button>

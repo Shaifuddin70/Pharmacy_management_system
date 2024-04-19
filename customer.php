@@ -2,10 +2,10 @@
 include 'nav/nav.php';
 
 // Check if user is logged in as admin
-if (!isset($_SESSION['admin'])) {
+if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
     echo "<script>alert('Unauthorized Access')</script>";
     echo "<script>window.location='index.php'</script>";
-    exit; // Stop execution if unauthorized
+    exit();
 }
 
 // Check if deleteid is set and numeric
