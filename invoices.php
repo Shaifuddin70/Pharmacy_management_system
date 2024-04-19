@@ -82,8 +82,8 @@ if (isset($_POST['delete_invoice'])) {
         <h1 class="font-weight-bold">All Sales</h1>
         <button onclick="purchaseReport()" class="btn btn-info"> Create Report</button>
         <form method="get">
-            <div class="input-group date">
-                <label for="from" class="col-1 col-form-label">Employee</label>
+            <div class="input-group date" style="margin-bottom: 20px; margin-top:10px">
+                <label for="from" class="col-1 col-form-label">Employee: </label>
                 <?php
                 $employee_query = "SELECT * FROM employee";
                 $employee_result = mysqli_query($conn, $employee_query);
