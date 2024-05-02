@@ -29,9 +29,9 @@ $total_pages = ceil($total_results / $results_per_page);
 ?>
 
 <div class="container">
-    <h1>Medicine Purchase Requests</h1>
+    <h2 class="text-center text-uppercase p-2">Medicine Purchase Requests</h2>
     <div id="table"> 
-       <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+       <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
            <thead>
                <tr>
                    <th id="sn">S/N</th>

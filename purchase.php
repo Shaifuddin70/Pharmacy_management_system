@@ -14,8 +14,8 @@ if(isset($_SESSION['stuff'])) {
 
 <form method="post">        
     <div class="container">
-        <h1>Purchase Medicine</h1>
-        <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+        <h2 class="text-center text-uppercase p-2">Purchase Medicine</h2>
+        <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
             <tr>
                 <th>Catagory</th>
                 <th>Medicine</th>

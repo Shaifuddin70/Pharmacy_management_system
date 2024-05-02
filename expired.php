@@ -23,7 +23,7 @@ $offset = ($page - 1) * $results_per_page;
 
 
 // Count total records
-$count_query = "SELECT COUNT(*) AS total FROM medicine_stock WHERE unit < 5"; // Updated query
+$count_query = "SELECT COUNT(*) AS total FROM medicine_stock WHERE unit < 5 OR expiry_date < CURDATE()"; // Updated query to include expired medicines
 $count_result = mysqli_query($conn, $count_query);
 $count_row = mysqli_fetch_assoc($count_result);
 $total_records = $count_row['total'];
@@ -34,14 +34,14 @@ $total_pages = ceil($total_records / $results_per_page);
 
 
 // Fetch data with pagination
-$sql = "SELECT m.medicine_name, m.catagory_id, m.brand_id, m.generic_id, c.catagory_name, b.brand_name, g.generic_name, s.unit, s.pprice, s.sprice, DATE(s.expiry_date) AS expiry_date, r.shelf_number
+$sql = "SELECT m.medicine_id,m.medicine_name, m.catagory_id, m.brand_id, m.generic_id, c.catagory_name, b.brand_name, g.generic_name, s.unit, s.pprice, s.sprice, DATE(s.expiry_date) AS expiry_date, r.shelf_number
         FROM medicine_stock s
         JOIN medicine m ON s.medicine_id = m.medicine_id
         JOIN medicine_catagory c ON m.catagory_id = c.catagory_id
         JOIN medicine_brand b ON m.brand_id = b.brand_id
         JOIN medicine_generic g ON m.generic_id = g.generic_id
         LEFT JOIN shelf r ON s.shelf_id = r.shelf_id
-        WHERE s.unit < 5 
+        WHERE s.unit < 5 OR s.expiry_date < CURDATE()
         LIMIT $offset, $results_per_page
 ";
 $data = mysqli_query($conn, $sql);
@@ -64,13 +64,12 @@ $data = mysqli_query($conn, $sql);
 </head>
 
 <div class="container">
-    <h2 class="text-center text-uppercase p-2">All Stock Items</h2>
+    <h2 class="text-center text-uppercase p-2">Expired Medicine</h2>
+    <hr>
 
-    
+
 
     <div id="table">
-        <h2 id="invisible" class="d-none">Stock Report</h2>
-
         <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -99,9 +98,13 @@ $data = mysqli_query($conn, $sql);
                         <td>' . $result['brand_name'] . '</td>
                         <td>' . $result['generic_name'] . '</td>
                         <td>' . $result['unit'] . '</td>
-                        <td>' . $result['expiry_date'] . '</td>
+                        <td class="text-danger">' . $result['expiry_date'] . '</td>
                         <td>' . $result['shelf_number'] . '</td>
-                        <td><a href="purchase.php" class="text-light"><button class="btn btn-primary">Buy Now</button></a></td>
+                        <td><a href="returnexpired.php?medicine_id='.$result['medicine_id'].'" class="text-light"><button class="btn btn-danger">Return</button></a>
+                        <a href="renew.php?medicine_id='.$result['medicine_id'].'" class="text-light"><button class="btn btn-success">Renew</button></a>
+                        </td>
+                        
+
                     </tr>';
                         $c++;
                     }

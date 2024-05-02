@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
     <div class="title">
 
         <form action="" method="post" onsubmit="return validateForm()">
-            <h1 class="font-weight-bold">Create New Invoice</h1>
+            <h2 class="text-center text-uppercase p-2">Create New Invoice</h2>
             <?php
             // Retrieve the maximum invoice_id from the invoices table
             $query = "SELECT MAX(invoice_id) AS max_id FROM invoices";
@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
                 <a href="add_customer.php"><button class="col-2 btn btn-primary col-12 ml-2"> Add Customer</button> </a>
             </div>
             <div class="invoice_select">
-                <table id="medicineTable" class="display table table-striped table-bordered table-hover">
+                <table id="medicineTable"class="display table table-bordered table-hover text-center">
                     <tr>
                         <th>Medicine</th>
                         <th>Available</th>

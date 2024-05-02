@@ -2,13 +2,13 @@
 
 <div class="container">
     <div class="title">
-        <h1>Items</h1>
+        <h2>Items</h2>
         <a href="add_medicine.php">
             <button class="col-2 btn btn-primary add_button"> Add Item</button>
         </a>
     </div>
 
-    <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+    <table id="zctb"class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>S/N</th>

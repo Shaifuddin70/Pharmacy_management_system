@@ -56,7 +56,7 @@ $total_pages = ceil($total_results / $results_per_page);
 
 <div class="container">
     <div class="title">
-        <h1 class="font-weight-bold">Employee List</h1>
+        <h2 class="text-center text-uppercase p-2">Employee List</h2>
         <a href="add_employee.php"><button class="col-2 btn btn-primary add_button"> Add Employee</button></a>
     </div>
     <?php
@@ -66,7 +66,7 @@ $total_pages = ceil($total_results / $results_per_page);
     }
     ?>
 
-    <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+    <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>S/N</th>

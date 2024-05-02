@@ -32,9 +32,9 @@ if (!$medicine) {
 
 <div class="container">
     <form method="post">
-        <h1>Update Medicine Details</h1>
+        <h2 class="text-center text-uppercase p-2">Update Medicine Details</h2>
         <div class="container mt-3">
-            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+            <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
                 <tr>
                     <td><label for="medicine_name">Medicine Name:</label></td>
                     <td><input type="text" class="form-control " required="true" name="medicine_name" id="medicine_name" value="<?php echo $medicine['medicine_name']; ?>"></td>

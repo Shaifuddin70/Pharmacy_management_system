@@ -10,7 +10,7 @@ if (isset($_SESSION['stuff'])) {
 
 <div class="container">
     <form method="post">
-        <h1>Update Catagory</h1>
+        <h2>Update Catagory</h2>
         <div class="container mt-3">
 
             <table class="table table-borderless">

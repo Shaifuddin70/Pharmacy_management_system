@@ -103,7 +103,7 @@ if (isset($_POST['submit'])) {
 
 <form method="post">
     <div class="container">
-        <h1>Return Medicine</h1>
+        <h2 class="text-center text-uppercase p-2">Return Medicine</h2>
         <div class="customer">
             <h5>Select Invoice ID: </h5>
             <label for="invoiceId"></label>
@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
             </select>
         </div>
 
-        <table id="orderDetailsTable" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+        <table id="orderDetailsTable" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>Medicine Name</th>

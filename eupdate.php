@@ -9,7 +9,7 @@ $fetch = mysqli_fetch_array($query);
 
 
 <div class="container mt-3">
-    <h1>Update Employee Info.</h1>
+    <h2 class="text-center text-uppercase p-2">Update Employee Info.</h2>
     <form method="post">
 
         <table class="table table-borderless">

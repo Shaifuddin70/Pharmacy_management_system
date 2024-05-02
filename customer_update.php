@@ -51,7 +51,7 @@ if(isset($_POST['submit'])) {
 
 <div class="container">
     <div class="title">
-        <h1 class="font-weight-bold">Edit Customer</h1>
+        <h2 class="text-center text-uppercase p-2">Edit Customer</h2>
     </div>
     <form method="post" action="">
         <div class="form-group">

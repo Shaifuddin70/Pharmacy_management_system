@@ -1,7 +1,7 @@
 <?php include 'nav/nav.php'?>
 <div class="container mt-3">
     <form method="post">
-        <h1>Change Password</h1>
+        <h2>Change Password</h2>
         <table class="table table-borderless">
             <tr>
                 <th>Old Password</th>

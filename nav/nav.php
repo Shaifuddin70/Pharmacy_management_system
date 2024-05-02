@@ -17,6 +17,10 @@ if ($total != 0) {
         }
     }
 }
+
+$query = mysqli_query($conn, "SELECT * FROM medicine_stock WHERE expiry_date < CURDATE()");
+$e = mysqli_num_rows($query);
+
 // purcahse notification
 $pquery = mysqli_query($conn, "Select *from purchase_table");
 $ptotal = mysqli_num_rows($pquery);
@@ -103,6 +107,15 @@ if ($ptotal != 0) {
                 </ul>
             </li>
             <li>
+            <a href="supplier.php">
+              <i class="bx bx-line-chart"></i>
+              <span class="link_name">Supplier</span>
+            </a>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="supplier.php">Customer</a></li>
+            </ul>
+          </li>
+            <li>
             <a href="customer.php">
               <i class="bx bx-line-chart"></i>
               <span class="link_name">Customer</span>
@@ -130,7 +143,21 @@ if ($ptotal != 0) {
                             ' . $c . '</span>' ;
            echo' </a>
             <ul class="sub-menu blank">
-              <li><a class="link_name" href="add_order.php">Out Of Stock</a></li>
+              <li><a class="link_name" href="outofstock.php">Out Of Stock</a></li>
+              
+            </ul>
+          </li>
+          <li>
+            <a href="expired.php">
+              <i class="bx bx-pie-chart-alt-2"></i>
+              <span class="link_name">Expired</span>';
+           
+                        if ($e != 0) echo '
+                            <span style="position: absolute; top: -0.1px;left: 110px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
+                            ' . $e . '</span>' ;
+           echo' </a>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="expired.php">Out Of Stock</a></li>
               
             </ul>
           </li>
@@ -261,7 +288,7 @@ if ($ptotal != 0) {
             <img src="image/user.png" alt="profileImg">
           </div>
           <div class="name-job">
-            <div class="profile_name"><a class="link_name" href="profile.php"><?php
+            <div class="profile_name"><a class="link_name text-white text-uppercase" href="profile.php"><?php
 
                                       $query = mysqli_query($conn, "SELECT * FROM `employee` WHERE `id`='$_SESSION[eid]'");
                                       $fetch = mysqli_fetch_array($query);

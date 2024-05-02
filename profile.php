@@ -9,7 +9,7 @@ $fetch = mysqli_fetch_array($query);
 
 
 <div class="container mt-3">
-    <h1>Employee Info.</h1>
+    <h2>Employee Info.</h2>
     <form method="post" action="changepass.php">
         <table class="table table-borderless">
             <tr>

@@ -57,19 +57,21 @@ if (!empty($cq) || !empty($iq)) {
     $whereClause = "WHERE 1 $cq $iq";
 }
 
-// Fetch data with pagination
+
 // Fetch data with pagination
 $sql = "
-        SELECT m.medicine_name, m.catagory_id, m.brand_id, m.generic_id, c.catagory_name, b.brand_name, g.generic_name, s.unit, s.pprice, s.sprice, DATE(s.expiry_date) AS expiry_date, r.shelf_number
+        SELECT m.medicine_name, m.catagory_id, m.brand_id, m.generic_id, s.supplier_id,sup.supplier_name, c.catagory_name, b.brand_name, g.generic_name, s.unit, s.pprice, s.sprice, DATE(s.expiry_date) AS expiry_date, r.shelf_number
         FROM medicine_stock s
         JOIN medicine m ON s.medicine_id = m.medicine_id
         JOIN medicine_catagory c ON m.catagory_id = c.catagory_id
         JOIN medicine_brand b ON m.brand_id = b.brand_id
         JOIN medicine_generic g ON m.generic_id = g.generic_id
+        JOIN supplier sup ON s.supplier_id = sup.supplier_id
         LEFT JOIN shelf r ON s.shelf_id = r.shelf_id
         $whereClause
         LIMIT $offset, $results_per_page
 ";
+
 
 $data = mysqli_query($conn, $sql);
 
@@ -90,10 +92,10 @@ $data = mysqli_query($conn, $sql);
     </style>
 </head>
 
-<div class="container">
-    <h1 style="margin-bottom :50px;">All Stock Items</h1>
+<div class="container-xl">
+    <h2 class="text-center text-uppercase p-2">All Stock Items</h2>
     <!-- <button onclick="purchaseReport()" class="btn btn-info"> Create Report</button> -->
-    <a href="purchase.php"><button class="btn btn-primary" >Create Purchase Request</button></a>
+    <a href="purchase.php"><button class="btn btn-primary">Create Purchase Request</button></a>
     <form method="post">
         <div class="input-group date" style="margin-left:250px;bottom: 35px;font-weight: bold;">
             <label for="brand" class="col-1 col-form-label">Brand: </label>
@@ -121,12 +123,12 @@ $data = mysqli_query($conn, $sql);
             <input type="submit" class="btn btn-info" name="submit" value="Filter">
         </div>
     </form>
-    
+
 
     <div id="table">
-        <h1 id="invisible" class="d-none">Stock Report</h1>
+        <h2 id="invisible" class="d-none">Stock Report</h2>
 
-        <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+        <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>S/N</th>
@@ -134,6 +136,7 @@ $data = mysqli_query($conn, $sql);
                     <th>Category</th>
                     <th>Brand</th>
                     <th>Generic </th>
+                    <th>Supplier</th>
                     <th>Quantity</th>
                     <th>Purchase Price</th>
                     <th>Sell Price</th>
@@ -153,9 +156,10 @@ $data = mysqli_query($conn, $sql);
                         <td>' . $result['catagory_name'] . '</td>
                         <td>' . $result['brand_name'] . '</td>
                         <td>' . $result['generic_name'] . '</td>
+                        <td>' . $result['supplier_name'] . '</td>
                         <td>' . $result['unit'] . '</td>
-                        <td>' . $result['pprice'] . '</td>
-                        <td>' . $result['sprice'] . '</td>
+                        <td>' . $result['pprice'] . ' Tk.</td>
+                        <td>' . $result['sprice'] . ' Tk.</td>
                         <td>' . $result['expiry_date'] . '</td>
                         <td>' . $result['shelf_number'] . '</td>
                     </tr>';
@@ -167,24 +171,27 @@ $data = mysqli_query($conn, $sql);
                 ?>
             </tbody>
         </table>
-        <!-- Pagination links -->
-        <div class="pagination">
-            <ul class="pagination">
-                <!-- Previous button -->
-                <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?php echo ($page <= 1) ? 1 : ($page - 1); ?>">&laquo; Previous</a>
-                </li>
-                <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                    <li class="page-item <?php echo ($page == $i) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    </li>
-                <?php endfor; ?>
-                <!-- Next button -->
-                <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?php echo ($page >= $total_pages) ? $total_pages : ($page + 1); ?>">Next &raquo;</a>
-                </li>
-            </ul>
-        </div>
+        
+                    <!-- Pagination links -->
+                    <div class="pagination">
+                        <ul class="pagination">
+                            <!-- Previous button -->
+                            <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo ($page <= 1) ? 1 : ($page - 1); ?>">&laquo; Previous</a>
+                            </li>
+                            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                                <li class="page-item <?php echo ($page == $i) ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            <!-- Next button -->
+                            <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo ($page >= $total_pages) ? $total_pages : ($page + 1); ?>">Next &raquo;</a>
+                            </li>
+                        </ul>
+                    </div>
+               
+
     </div>
 </div>
 

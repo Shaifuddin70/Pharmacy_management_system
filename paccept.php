@@ -34,6 +34,10 @@ if (isset($_GET['acceptid'])) {
     // Fetch shelf numbers from database for dropdown
     $shelf_query = "SELECT * FROM shelf";
     $shelf_result = mysqli_query($conn, $shelf_query);
+
+    // Fetch supplier from database for dropdown
+    $supplier_query = "SELECT * FROM supplier";
+    $supplier_result = mysqli_query($conn, $supplier_query);
 } else {
     // If acceptid is not provided, handle the scenario accordingly
     echo "<script>alert('Purchase ID not provided');</script>";
@@ -47,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $expiry_date = $_POST['expiry_date'];
     $purchase_price = $_POST['purchase_price'];
     $sell_price = $_POST['sell_price'];
+    $supplier_id = $_POST['supplier_id']; // Corrected column name
 
     // Check if the medicine is already present in the medicine_stock table
     $stock_query = "SELECT * FROM medicine_stock WHERE medicine_id = ?";
@@ -58,15 +63,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($num_rows > 0) {
         // If medicine is already present, update the existing record
-        $update_query = "UPDATE medicine_stock SET unit = unit + ?, expiry_date = ?, pprice = ?, sprice = ?, shelf_id = ? WHERE medicine_id = ?";
+        $update_query = "UPDATE medicine_stock SET unit = unit + ?, expiry_date = ?, pprice = ?, sprice = ?, shelf_id = ?, supplier_id = ? WHERE medicine_id = ?";
         $update_stmt = mysqli_prepare($conn, $update_query);
-        mysqli_stmt_bind_param($update_stmt, "isddii", $quantity, $expiry_date, $purchase_price, $sell_price, $shelf_number, $medicine_id);
+        mysqli_stmt_bind_param($update_stmt, "isddiii", $quantity, $expiry_date, $purchase_price, $sell_price, $shelf_number, $supplier_id, $medicine_id);
         mysqli_stmt_execute($update_stmt);
     } else {
         // If medicine is not present, insert a new record
-        $insert_query = "INSERT INTO medicine_stock (medicine_id, unit, shelf_id, expiry_date, pprice, sprice) VALUES (?, ?, ?, ?, ?, ?)";
+        $insert_query = "INSERT INTO medicine_stock (medicine_id, unit, shelf_id, expiry_date, pprice, sprice, supplier_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $insert_stmt = mysqli_prepare($conn, $insert_query);
-        mysqli_stmt_bind_param($insert_stmt, "iiissd", $medicine_id, $quantity, $shelf_number, $expiry_date, $purchase_price, $sell_price);
+        mysqli_stmt_bind_param($insert_stmt, "iiissdi", $medicine_id, $quantity, $shelf_number, $expiry_date, $purchase_price, $sell_price, $supplier_id);
         mysqli_stmt_execute($insert_stmt);
     }
 
@@ -81,12 +86,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>window.location='stock.php'</script>";
     exit();
 }
+
 ?>
 
 <div class="container">
-    <h1>Accept Medicine Purchase</h1>
+    <h2 class="text-center text-uppercase p-2">Accept Medicine Purchase</h2>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?acceptid=" . $id); ?>">
-        <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+        <table id="zctb"class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
             <tbody>
                 <tr>
                     <td><label for="medicine_name">Medicine Name:</label></td>
@@ -95,6 +101,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tr>
                     <td><label for="quantity">Quantity:</label></td>
                     <td><input type="text" class="form-control" id="quantity" value="<?php echo $quantity; ?>" readonly></td>
+                </tr> 
+                <tr>
+                    <td><label for="shelf_number">Supplier:</label></td>
+                    <td>
+                        <select class="form-control" id="supplier_id" name="supplier_id" required>
+                            <option value="">Select Supplier</option>
+                            <?php while ($row = mysqli_fetch_assoc($supplier_result)) : ?>
+                                <option value="<?php echo $row['supplier_id']; ?>"><?php echo $row['supplier_name']; ?></option>
+                            <?php endwhile; ?>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td><label for="shelf_number">Shelf Number:</label></td>

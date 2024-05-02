@@ -49,10 +49,10 @@ if (isset($_GET['deleteid'])) {
 ?>
 <div class="container">
     <div class="title">
-        <h2 class="font-weight-bold">All Medicine</h2>
+        <h2 class="text-center text-uppercase p-2">All Medicine</h2>
         <a href="add_medicine.php"><button href="add_medicine.php" class="col-2 btn btn-primary add_button"> Add Medicine</button></a>
     </div>
-    <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+    <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>S/N</th>

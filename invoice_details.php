@@ -33,75 +33,104 @@ $row = mysqli_fetch_assoc($result);
 
 <!-- CSS for Printing -->
 <style>
-/* Hide unnecessary elements */
-body {
-    background: none;
-}
+    /* Hide unnecessary elements */
+    body {
+        background: none;
+    }
 
-/* Adjust styles for printing */
-.container {
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-}
+    /* Adjust styles for printing */
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-/* Additional styles for better print appearance */
-.discount-subtotal {
-    margin-top: 20px;
-}
+    /* Additional styles for better print appearance */
+    .discount-subtotal {
+        margin-top: 20px;
+    }
 
-.float-right {
-    float: right;
-}
+    .float-right {
+        float: right;
+    }
 </style>
 
 <!-- Print Button -->
 <!-- <button class="btn btn-primary" onclick="window.print()">Print Invoice</button> -->
 
-<div class="container">
+<div class="container" id="container">
     <div class="title">
-        <h1 class="font-weight-bold">Invoice Details</h1>
+        <h2 class="text-center text-uppercase p-2">Invoice Details</h2>
         <!-- Invoice details -->
-        <h3>Invoice ID: <?php echo $invoice_id; ?></h3>
-        <h4>Customer Name: <?php echo $row['customer_name']; ?></h4>
-
-        <!-- Invoice items table -->
-        <!-- Invoice items table -->
-<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>Medicine Name</th>
-            <th>Unit Price (TK)</th>
-            <th>Quantity</th>
-            <th>Total Price (TK)</th>
-        </tr>
-    </thead>
-    <tbody>
+        <!-- Display only the date -->
         <?php
-        // Reset result pointer
-        mysqli_data_seek($result, 0);
-        // Fetch invoice items from the result set
-        while ($item_row = mysqli_fetch_assoc($result)) : ?>
+        // Format the date using the date() function
+        $invoice_date = date('Y-m-d', strtotime($row['created_at']));
+        ?>
+        <h5 class="text-right">Invoice Date: <?php echo $invoice_date; ?></h5>
+        <h5 class="text-right">Invoice ID: <?php echo $invoice_id; ?></h5>
+        <h4 class="font-weight-bold mb-3">Customer Name: <?php echo $row['customer_name']; ?></h4>
+    </div>
+
+    <!-- Invoice items table -->
+    <table id="zctb" class="display table table-bordered table-hover " cellspacing="0" width="100%">
+        <thead>
             <tr>
-                <td><?php echo $item_row['medicine_name']; ?></td>
-                <td><?php echo $item_row['total_price'] / $item_row['quantity']; ?></td>
-                <td><?php echo $item_row['quantity']; ?></td>
-                <td><?php echo $item_row['total_price']; ?> TK</td>
+                <th>Medicine Name</th>
+                <th>Unit Price (TK)</th>
+                <th>Quantity</th>
+                <th>Total Price (TK)</th>
             </tr>
-        <?php endwhile; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php
+            // Reset result pointer
+            mysqli_data_seek($result, 0);
+            // Fetch invoice items from the result set
+            while ($item_row = mysqli_fetch_assoc($result)) : ?>
+                <tr>
+                    <td><?php echo $item_row['medicine_name']; ?></td>
+                    <td><?php echo $item_row['total_price'] / $item_row['quantity']; ?></td>
+                    <td><?php echo $item_row['quantity']; ?></td>
+                    <td><?php echo $item_row['total_price']; ?> TK</td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
 
 
-        <!-- Discount and Subtotal -->
-        <div class="discount-subtotal">
-            <div class="float-right">
-                <h4>Total: <?php echo $row['total']; ?> TK</h4>
-                <h4>Discount: <?php echo $row['discount']; ?> %</h4>
-                <h4>Subtotal: <?php echo $row['subtotal']; ?> TK</h4>
-            </div>
+    <!-- Discount and Subtotal -->
+    <div class="discount-subtotal">
+        <div class="float-right">
+            <h5>Total: <?php echo $row['total']; ?> TK</h5>
+            <h5>Discount: <?php echo $row['discount']; ?> %</h5>
+            <h5>Subtotal: <?php echo $row['subtotal']; ?> TK</h5>
         </div>
     </div>
 </div>
+
+<!-- Print Button -->
+<div class="container text-center mt-3">
+<button onclick="purchaseReport()" class="btn btn-info">Print Invoice</button>
+</div>
+<script>
+const purchaseReport = () => {
+    // Get the content of the container
+    var printContents = document.getElementById('container').innerHTML;
+    // Create a new window for printing
+    var printWindow = window.open('', '_blank');
+    // Set the content of the new window to the container content with added CSS styles
+    printWindow.document.write('<html><head><title>Print Invoice</title><style>body { font-family: Arial, sans-serif; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; } th { background-color: #f2f2f2; }</style></head><body>' + printContents + '</body></html>');
+    // Print the content
+    printWindow.document.close();
+    printWindow.print();
+    // Close the print window after printing
+    printWindow.close();
+}
+</script>
+
+
+
+
 
 <?php include 'nav/footer.php'; ?>

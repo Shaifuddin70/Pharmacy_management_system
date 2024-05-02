@@ -464,9 +464,9 @@ function AddFont($family, $style='', $file='')
 	{
 		// Embedded font
 		if($info['type']=='TrueType')
-			$this->FontFiles[$info['file']] = array('length1'=>$info['originalsize']);
+			$this->FontFiles[$info['file']] = array('length2'=>$info['originalsize']);
 		else
-			$this->FontFiles[$info['file']] = array('length1'=>$info['size1'], 'length2'=>$info['size2']);
+			$this->FontFiles[$info['file']] = array('length2'=>$info['size1'], 'length2'=>$info['size2']);
 	}
 	$this->fonts[$fontkey] = $info;
 }
@@ -1614,11 +1614,11 @@ protected function _putfonts()
 			$this->Error('Font file not found: '.$file);
 		$compressed = (substr($file,-2)=='.z');
 		if(!$compressed && isset($info['length2']))
-			$font = substr($font,6,$info['length1']).substr($font,6+$info['length1']+6,$info['length2']);
+			$font = substr($font,6,$info['length2']).substr($font,6+$info['length2']+6,$info['length2']);
 		$this->_put('<</Length '.strlen($font));
 		if($compressed)
 			$this->_put('/Filter /FlateDecode');
-		$this->_put('/Length1 '.$info['length1']);
+		$this->_put('/Length2 '.$info['length2']);
 		if(isset($info['length2']))
 			$this->_put('/Length2 '.$info['length2'].' /Length3 0');
 		$this->_put('>>');

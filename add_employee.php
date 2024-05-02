@@ -12,7 +12,7 @@ if (isset($_SESSION['admin'])) {
 
 <div class="container mt-3">
     <form method="post">
-        <h1>Add New Employee</h1>
+        <h2>Add New Employee</h2>
        
         <table class="table table-borderless">
             <tr>
