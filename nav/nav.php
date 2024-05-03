@@ -77,20 +77,7 @@ if ($ptotal != 0) {
                 <li><a class="link_name" href="dashboard.php">Dashboard</a></li>
                 </ul>
             </li>
-            <li>
-                <a href="purchase_request.php">
-                <i class="bx bx-grid-alt"></i>
-                <span class="link_name">Purchase Request</span>';
-                
-                if ($p != 0) {
-                    echo '<span style="position: absolute; top: -0.1px;left: 235px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;">' . $p . '</span>';
-                }
-
-            echo '</a>
-                <ul class="sub-menu blank">
-                <li><a class="link_name" href="purchase_request.php">Purchase Request</a></li>
-                </ul>
-            </li>
+           
             <li>
                 <div class="iocn-link">
                 <a href="medicine_details.php">
@@ -107,35 +94,31 @@ if ($ptotal != 0) {
                 </ul>
             </li>
             <li>
-            <a href="supplier.php">
-              <i class="bx bx-line-chart"></i>
-              <span class="link_name">Supplier</span>
-            </a>
+            <a href="purchase_request.php">
+            <i class="bx bxs-cart-add" ></i>
+            <span class="link_name">Purchase Request</span>';
+            
+            if ($p != 0) {
+                echo '<span style="position: absolute; top: -0.1px;left: 235px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;">' . $p . '</span>';
+            }
+
+        echo '</a>
             <ul class="sub-menu blank">
-              <li><a class="link_name" href="supplier.php">Customer</a></li>
+            <li><a class="link_name" href="purchase_request.php">Purchase Request</a></li>
             </ul>
-          </li>
+        </li>
             <li>
-            <a href="customer.php">
-              <i class="bx bx-line-chart"></i>
-              <span class="link_name">Customer</span>
+            <a href="stock.php">
+            <i class="bx bxs-store" ></i>
+              <span class="link_name">Stock</span>
             </a>
             <ul class="sub-menu blank">
-              <li><a class="link_name" href="customer.php">Customer</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="employee.php">
-              <i class="bx bx-pie-chart-alt-2"></i>
-              <span class="link_name">Employee</span>
-            </a>
-            <ul class="sub-menu blank">
-              <li><a class="link_name" href="employee.php">Employee</a></li>
+              <li><a class="link_name" href="stock.php">Stock</a></li>
             </ul>
           </li>
           <li>
             <a href="outofstock.php">
-              <i class="bx bx-pie-chart-alt-2"></i>
+            <i class="bx bxs-minus-circle" ></i>
               <span class="link_name">Out Of Stock</span>';
            
                         if ($c != 0) echo '
@@ -149,7 +132,7 @@ if ($ptotal != 0) {
           </li>
           <li>
             <a href="expired.php">
-              <i class="bx bx-pie-chart-alt-2"></i>
+            <i class="bx bxs-package" ></i>
               <span class="link_name">Expired</span>';
            
                         if ($e != 0) echo '
@@ -165,36 +148,55 @@ if ($ptotal != 0) {
             <div class="iocn-link">
               <a href="add_order.php">
                 <i class="bx bx-collection"></i>
-                <span class="link_name">New Sell</span>
+                <span class="link_name">Create Invoice</span>
               </a>
             </div>
           </li>
           <li>
             <div class="iocn-link">
               <a href="invoices.php">
-                <i class="bx bx-collection"></i>
-                <span class="link_name">Sales</span>
+              <i class="bx bx-money" ></i>
+                <span class="link_name">Invoices</span>
               </a>
             </div>
           </li>
           <li>
             <a href="return.php">
-              <i class="bx bx-pie-chart-alt-2"></i>
+            <i class="bx bxs-caret-down-square" ></i>
               <span class="link_name">Return</span>
             </a>
             <ul class="sub-menu blank">
               <li><a class="link_name" href="return.php">Return</a></li>
             </ul>
           </li>
+          
           <li>
-            <a href="stock.php">
-              <i class="bx bx-pie-chart-alt-2"></i>
-              <span class="link_name">Stock</span>
-            </a>
-            <ul class="sub-menu blank">
-              <li><a class="link_name" href="stock.php">Stock</a></li>
-            </ul>
-          </li>
+          <a href="supplier.php">
+          <i class="bx bxs-user-rectangle" ></i>
+            <span class="link_name">Supplier</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="supplier.php">Customer</a></li>
+          </ul>
+        </li>
+          <li>
+          <a href="customer.php">
+          <i class="bx bxs-user-detail" ></i>
+            <span class="link_name">Customer</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="customer.php">Customer</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="employee.php">
+          <i class="bx bxs-user-badge"></i>
+            <span class="link_name">Employee</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="employee.php">Employee</a></li>
+          </ul>
+        </li>
           <li>
            
             ';
@@ -220,62 +222,76 @@ if ($ptotal != 0) {
           </li>
           <li>
           <a href="customer.php">
-            <i class="bx bx-line-chart"></i>
+          <i class="bx bxs-user-detail" ></i>
             <span class="link_name">Customer</span>
           </a>
           <ul class="sub-menu blank">
             <li><a class="link_name" href="customer.php">Customer</a></li>
           </ul>
         </li>
-       
         <li>
-          <a href="outofstock.php">
-            <i class="bx bx-pie-chart-alt-2"></i>
-            <span class="link_name">Out Of Stock</span>';
-         
-                      if ($c != 0) echo '
-                          <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
-                          ' . $c . '</span>' ;
-         echo' </a>
-          <ul class="sub-menu blank">
-            <li><a class="link_name" href="add_order.php">Out Of Stock</a></li>
-            
-          </ul>
-        </li>
-        <li>
-          <div class="iocn-link">
-            <a href="add_order.php">
-              <i class="bx bx-collection"></i>
-              <span class="link_name">New Sell</span>
+            <a href="stock.php">
+            <i class="bx bxs-store" ></i>
+              <span class="link_name">Stock</span>
             </a>
-          </div>
-        </li>
-        <li>
-          <div class="iocn-link">
-            <a href="invoices.php">
-              <i class="bx bx-collection"></i>
-              <span class="link_name">Sales</span>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="stock.php">Stock</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="outofstock.php">
+            <i class="bx bxs-minus-circle" ></i>
+              <span class="link_name">Out Of Stock</span>';
+           
+                        if ($c != 0) echo '
+                            <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
+                            ' . $c . '</span>' ;
+           echo' </a>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="outofstock.php">Out Of Stock</a></li>
+              
+            </ul>
+          </li>
+          <li>
+            <a href="expired.php">
+            <i class="bx bxs-package" ></i>
+              <span class="link_name">Expired</span>';
+           
+                        if ($e != 0) echo '
+                            <span style="position: absolute; top: -0.1px;left: 110px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
+                            ' . $e . '</span>' ;
+           echo' </a>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="expired.php">Out Of Stock</a></li>
+              
+            </ul>
+          </li>
+          <li>
+            <div class="iocn-link">
+              <a href="add_order.php">
+                <i class="bx bx-collection"></i>
+                <span class="link_name">Create Invoice</span>
+              </a>
+            </div>
+          </li>
+          <li>
+            <div class="iocn-link">
+              <a href="invoices.php">
+              <i class="bx bx-money" ></i>
+                <span class="link_name">Invoices</span>
+              </a>
+            </div>
+          </li>
+          <li>
+            <a href="return.php">
+            <i class="bx bxs-caret-down-square" ></i>
+              <span class="link_name">Return</span>
             </a>
-          </div>
-        </li>
-        <li>
-          <a href="return.php">
-            <i class="bx bx-pie-chart-alt-2"></i>
-            <span class="link_name">Return</span>
-          </a>
-          <ul class="sub-menu blank">
-            <li><a class="link_name" href="return.php">Return</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="stock.php">
-            <i class="bx bx-pie-chart-alt-2"></i>
-            <span class="link_name">Stock</span>
-          </a>
-          <ul class="sub-menu blank">
-            <li><a class="link_name" href="stock.php">Stock</a></li>
-          </ul>
-        </li>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="return.php">Return</a></li>
+            </ul>
+          </li>
+        
         <li>
          
           ';

@@ -79,7 +79,7 @@ if (isset($_POST['delete_invoice'])) {
 }
 ?>
 
-<div class="container">
+<div class="container"style="margin-top: -45px;">
     <div class="title">
         <h2 class="text-center text-uppercase p-2">All Sales</h2>
         <button onclick="purchaseReport()" class="btn btn-info"> Create Report</button>
@@ -90,16 +90,16 @@ if (isset($_POST['delete_invoice'])) {
                 $employee_query = "SELECT * FROM employee";
                 $employee_result = mysqli_query($conn, $employee_query);
                 ?>
-                <select class="col-0 form-control" aria-label="Default select example" name="emp" id="emp">
+                <select class="form-control form-control col-3 mx-2 mb-2" aria-label="Default select example" name="emp" id="emp">
                     <option selected disabled>Select Emp.</option>
                     <?php while ($row = mysqli_fetch_assoc($employee_result)) : ?>
                         <option value="<?php echo $row['id']; ?>" <?php echo ($filter_employee == $row['id']) ? 'selected' : ''; ?>> <?php echo $row['name']; ?> </option>
                     <?php endwhile; ?>
                 </select>
-                <label for="from" class="col-0 col-form-label">From</label>
+                <label for="from" class="col-0 col-form-label mx-2">From</label>
                 <input type="date" id="from" class="form-control" name="from" value="<?php echo $filter_from; ?>" autocomplete="off">
-                <label for="to" class="col-0 col-form-label">to</label>
-                <input type="date" id="to" class="form-control" name="to" value="<?php echo $filter_to; ?>" autocomplete="off">
+                <label for="to" class="col-0 col-form-label mx-2">to</label>
+                <input type="date" id="to" class="form-control mx-2" name="to" value="<?php echo $filter_to; ?>" autocomplete="off">
                 <input type="submit" class="btn btn-info" name="submit" value="Filter">
             </div>
         </form>

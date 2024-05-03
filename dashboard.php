@@ -117,7 +117,7 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
         <div class="recent-sales box">
             <div class="title text-center">Recent Sales</div>
             <div class="sales-details">
-                <table id="zctb" class="display table  table-hover text-center" cellspacing="0" width="100%">
+                <table id="zctb" class="display table  table-hover text-center border" cellspacing="0" width="100%">
                     <?php
                     if ($result_recent_invoices && $result_recent_invoices->num_rows > 0) {
 
@@ -142,7 +142,7 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
         </div>
         <div class="top-sales box">
     <div class="title text-center">Top Selling Medicine</div>
-    <table id="zctb" class="display table  table-hover text-center" cellspacing="0" width="100%">
+    <table id="zctb" class="display table  table-hover text-center border" cellspacing="0" width="100%">
         <tr>
             <th>Medicine Name</th>
             <th>Total Quantity Sold</th>

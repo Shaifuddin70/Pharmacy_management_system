@@ -69,7 +69,7 @@ $row = mysqli_fetch_assoc($result);
         ?>
         <h5 class="text-right">Invoice Date: <?php echo $invoice_date; ?></h5>
         <h5 class="text-right">Invoice ID: <?php echo $invoice_id; ?></h5>
-        <h4 class="font-weight-bold mb-3">Customer Name: <?php echo $row['customer_name']; ?></h4>
+        <h4 class="font-weight-bold mb-3">Cutomer Name: <?php echo $row['customer_name']; ?></h4>
     </div>
 
     <!-- Invoice items table -->
@@ -115,18 +115,13 @@ $row = mysqli_fetch_assoc($result);
 </div>
 <script>
 const purchaseReport = () => {
-    // Get the content of the container
-    var printContents = document.getElementById('container').innerHTML;
-    // Create a new window for printing
-    var printWindow = window.open('', '_blank');
-    // Set the content of the new window to the container content with added CSS styles
-    printWindow.document.write('<html><head><title>Print Invoice</title><style>body { font-family: Arial, sans-serif; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; } th { background-color: #f2f2f2; }</style></head><body>' + printContents + '</body></html>');
-    // Print the content
-    printWindow.document.close();
-    printWindow.print();
-    // Close the print window after printing
-    printWindow.close();
-}
+        var divName = "container";
+        var printContents = document.getElementById(divName).outerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
 </script>
 
 

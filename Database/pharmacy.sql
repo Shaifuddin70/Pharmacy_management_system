@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2024 at 09:13 PM
+-- Generation Time: May 03, 2024 at 05:48 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,8 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`customer_id`, `customer_name`, `customer_email`, `customer_number`, `date`) VALUES
 (1, 'chaity', 'chaity@gmail.com', '01635485721', '2024-03-29 17:18:30'),
-(2, 'scot', 'scot@gmail.com', '1326548654', '2024-03-29 17:30:28');
+(2, 'scot', 'scot@gmail.com', '1326548654', '2024-03-29 17:30:28'),
+(11, 'Shaifuddin Ahammed', 'majinshifu@gmail.com', '01538347152', '2024-05-03 15:27:01');
 
 -- --------------------------------------------------------
 
@@ -116,10 +117,18 @@ CREATE TABLE `invoices` (
 
 INSERT INTO `invoices` (`invoice_id`, `employee_id`, `customer_id`, `total`, `discount`, `subtotal`, `profit`, `created_at`) VALUES
 (100, 1, 2, 4950.00, 5.00, 4702.50, 203, '2024-04-17 12:42:33'),
-(101, 1, 1, 4410.00, 5.00, 4189.50, 430, '2024-04-17 13:11:51'),
+(101, 1, 1, 4135.00, 5.00, 3928.25, 419, '2024-04-17 13:11:51'),
 (103, 1, 1, 825.00, 5.00, 783.75, 34, '2024-04-17 15:47:38'),
 (104, 1, 1, 5400.00, 5.00, 5130.00, 630, '2024-04-17 15:49:18'),
-(105, 1, 2, 1925.00, 5.00, 1828.75, -171, '2024-04-19 18:59:01');
+(105, 1, 2, 1925.00, 5.00, 1828.75, -171, '2024-04-19 18:59:01'),
+(106, 1, 1, 275.00, 5.00, 261.25, 11, '2024-05-01 06:51:09'),
+(107, 1, 1, 300.00, 5.00, 285.00, 35, '2024-05-01 06:51:35'),
+(108, 1, 1, 275.00, 5.00, 261.25, 11, '2024-05-01 06:53:59'),
+(110, 1, 1, 930.00, 5.00, 883.50, 84, '2024-05-03 14:24:43'),
+(111, 1, 2, 550.00, 5.00, 522.50, 23, '2024-05-03 14:27:53'),
+(112, 1, 1, 300.00, 5.00, 285.00, 35, '2024-05-03 14:29:05'),
+(114, 1, 1, 275.00, 5.00, 261.25, 11, '2024-05-03 14:34:47'),
+(115, 34, 11, 1800.00, 5.00, 1710.00, 210, '2024-05-03 15:27:20');
 
 -- --------------------------------------------------------
 
@@ -141,7 +150,7 @@ CREATE TABLE `invoice_items` (
 
 INSERT INTO `invoice_items` (`invoice_item_id`, `invoice_id`, `medicine_id`, `quantity`, `total_price`) VALUES
 (154, 100, 4, 90, 4950.00),
-(155, 101, 4, 10, 550.00),
+(155, 101, 4, 5, 275.00),
 (156, 101, 5, 40, 2150.00),
 (157, 101, 8, 1, 610.00),
 (158, 101, 10, 10, 600.00),
@@ -149,7 +158,20 @@ INSERT INTO `invoice_items` (`invoice_item_id`, `invoice_id`, `medicine_id`, `qu
 (161, 103, 4, 10, 550.00),
 (163, 103, 5, 5, 275.00),
 (164, 104, 10, 90, 5400.00),
-(165, 105, 5, 40, 1925.00);
+(165, 105, 5, 40, 1925.00),
+(166, 106, 4, 5, 275.00),
+(167, 107, 5, 5, 300.00),
+(168, 108, 4, 5, 275.00),
+(170, 110, 4, 10, 550.00),
+(171, 110, 8, 5, 0.00),
+(172, 110, 9, 1, 55.00),
+(173, 110, 10, 5, 325.00),
+(174, 111, 4, 10, 550.00),
+(175, 112, 5, 5, 300.00),
+(176, 114, 4, 5, 275.00),
+(177, 115, 4, 10, 550.00),
+(178, 115, 5, 10, 600.00),
+(179, 115, 10, 10, 650.00);
 
 -- --------------------------------------------------------
 
@@ -252,6 +274,7 @@ INSERT INTO `medicine_generic` (`generic_id`, `generic_name`, `date`) VALUES
 CREATE TABLE `medicine_stock` (
   `stock_id` int(11) NOT NULL,
   `medicine_id` int(10) NOT NULL,
+  `supplier_id` int(11) NOT NULL,
   `unit` int(10) NOT NULL,
   `expiry_date` date NOT NULL,
   `pprice` int(11) NOT NULL,
@@ -264,13 +287,11 @@ CREATE TABLE `medicine_stock` (
 -- Dumping data for table `medicine_stock`
 --
 
-INSERT INTO `medicine_stock` (`stock_id`, `medicine_id`, `unit`, `expiry_date`, `pprice`, `sprice`, `date`, `shelf_id`) VALUES
-(1, 4, 4868, '2024-05-11', 50, 55, '2024-03-25 13:15:32', 6),
-(25, 10, 100, '2024-04-30', 500, 650, '2024-04-07 21:53:46', 7),
-(31, 12, 495, '2024-04-08', 50, 100, '2024-04-07 22:34:34', 6),
-(33, 9, 992, '2024-05-11', 50, 55, '2024-04-07 23:07:57', 6),
-(34, 5, 165, '2024-05-11', 50, 60, '2024-04-07 23:24:49', 6),
-(35, 8, 104, '2024-04-17', 510, 620, '2024-04-15 20:35:36', 7);
+INSERT INTO `medicine_stock` (`stock_id`, `medicine_id`, `supplier_id`, `unit`, `expiry_date`, `pprice`, `sprice`, `date`, `shelf_id`) VALUES
+(1, 4, 1, 4828, '2024-05-11', 50, 55, '2024-03-25 13:15:32', 6),
+(33, 9, 1, 1047, '2024-05-03', 50, 55, '2024-04-07 23:07:57', 1),
+(34, 5, 1, 140, '2024-05-11', 50, 60, '2024-04-07 23:24:49', 6),
+(36, 10, 2, 85, '2026-11-03', 50, 65, '2024-05-02 10:25:35', 6);
 
 -- --------------------------------------------------------
 
@@ -309,7 +330,9 @@ INSERT INTO `purchase_table` (`id`, `medicine_id`, `unit`, `pprice`, `sprice`, `
 (71, 8, 100, 510, 610, '2024-04-16', 1),
 (72, 8, 100, 510, 620, '2024-04-17', 1),
 (73, 10, 100, 500, 650, '2024-04-17', 1),
-(74, 5, 100, 50, 60, '2024-04-20', 1);
+(74, 5, 100, 50, 60, '2024-04-20', 1),
+(75, 10, 100, 50, 65, '2024-05-02', 1),
+(76, 9, 56, 50, 55, '2024-05-02', 1);
 
 -- --------------------------------------------------------
 
@@ -383,6 +406,28 @@ INSERT INTO `shelf` (`shelf_id`, `shelf_number`) VALUES
 (6, 102),
 (7, 103),
 (8, 104);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplier`
+--
+
+CREATE TABLE `supplier` (
+  `supplier_id` int(11) NOT NULL,
+  `supplier_name` varchar(100) NOT NULL,
+  `supplier_number` varchar(20) NOT NULL,
+  `supplier_email` varchar(100) NOT NULL,
+  `creation_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `supplier`
+--
+
+INSERT INTO `supplier` (`supplier_id`, `supplier_name`, `supplier_number`, `supplier_email`, `creation_date`) VALUES
+(1, 'HOME COOKED', '01538347152', 'rokib2064@gmail.com', '2024-05-02 15:17:45'),
+(2, 'Shaifuddin Ahammed Rokib', '01635485720', 'shaifuddin70@gmail.com', '2024-05-02 16:04:12');
 
 --
 -- Indexes for dumped tables
@@ -483,6 +528,12 @@ ALTER TABLE `shelf`
   ADD PRIMARY KEY (`shelf_id`);
 
 --
+-- Indexes for table `supplier`
+--
+ALTER TABLE `supplier`
+  ADD PRIMARY KEY (`supplier_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -490,7 +541,7 @@ ALTER TABLE `shelf`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `department`
@@ -508,13 +559,13 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
 
 --
 -- AUTO_INCREMENT for table `medicine`
@@ -544,13 +595,13 @@ ALTER TABLE `medicine_generic`
 -- AUTO_INCREMENT for table `medicine_stock`
 --
 ALTER TABLE `medicine_stock`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `purchase_table`
 --
 ALTER TABLE `purchase_table`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `return_table`
@@ -569,6 +620,12 @@ ALTER TABLE `role`
 --
 ALTER TABLE `shelf`
   MODIFY `shelf_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `supplier`
+--
+ALTER TABLE `supplier`
+  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

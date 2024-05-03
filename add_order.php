@@ -1,6 +1,6 @@
 <?php
 include 'nav/nav.php';
-
+error_reporting(0);
 // Authorization check
 if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
     echo "<script>alert('Unauthorized Access')</script>";
@@ -123,7 +123,7 @@ if (isset($_POST['submit'])) {
                         <td>
                             <?php
                             // Retrieve medicine data from the database
-                            $query = "SELECT * FROM Medicine";
+                            $query = "SELECT m.* FROM Medicine m INNER JOIN medicine_stock s ON m.medicine_id = s.medicine_id WHERE s.unit > 0";
                             $result = mysqli_query($conn, $query);
                             ?>
                             <select class="form-control form-control-lg medicine" aria-label="Default select example" name="medicine[]" id="medicine">
@@ -152,7 +152,7 @@ if (isset($_POST['submit'])) {
                         </td>
                     </tr>
                 </table>
-                <button type="button" class="btn btn-success add-row">Add Row</button>
+                <button type="button" class="btn btn-success add-row">Add New Medicine</button>
                 <div class="subtotal col-3 mb-2 mt-2">
                     <label for="total">Total: </label>
                     <input type="text" class="form-control form-control-lg " name="total" id="total" placeholder="Total" disabled>
