@@ -56,8 +56,8 @@ $total_pages = ceil($total_results / $results_per_page);
                                    <td>' . $result['unit'] . '</td>
                                    <td> 
                                        <a href="paccept.php?acceptid=' . $result['id'] . '" class="text-light"><button class="btn btn-primary">Accept</button></a>
-                                       <a href="preject.php?rejectid=' . $result['id'] . '" class="text-light"><button class="btn btn-danger">Reject</button></a>
-                                       
+                                       <a href="purchase_request.php?rejectid=' . $result['id'] . '" class="text-light"><button class="btn btn-danger">Reject</button></a>
+                                   </td>
                                </tr>';
                            $c++;
                        }
@@ -92,4 +92,24 @@ $total_pages = ceil($total_results / $results_per_page);
    </div>
  
 </div>
-<?php include 'nav/footer.php'; ?>
+
+<?php 
+include 'nav/footer.php'; 
+
+// Reject query
+if(isset($_GET['rejectid']) && is_numeric($_GET['rejectid'])) {
+    $reject_id = $_GET['rejectid'];
+    
+    // Update the status of the purchase request to rejected
+    $reject_query = "UPDATE purchase_table SET status='0' WHERE id=$reject_id";
+    $reject_result = mysqli_query($conn, $reject_query);
+    
+    if($reject_result) {
+        // Redirect back to this page after rejection
+        header("Location: ".$_SERVER['PHP_SELF']."?page=".$page);
+        exit;
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+}
+?>

@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
                         <option value="<?php echo $row['customer_id']; ?>"> <?php echo $row['customer_name']; ?> </option>
                     <?php endwhile; ?>
                 </select>
-                <a href="add_customer.php"><button class="col-2 btn btn-primary col-12 ml-2"> Add Customer</button> </a>
+                <a href="add_customer.php"><p class="col-2 btn btn-primary col-12 ml-2"> Add Customer</p> </a>
             </div>
             <div class="invoice_select">
                 <table id="medicineTable"class="display table table-bordered table-hover text-center">
