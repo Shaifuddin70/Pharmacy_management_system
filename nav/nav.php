@@ -17,6 +17,7 @@ if ($total != 0) {
         }
     }
 }
+//Expired Notification
 
 $query = mysqli_query($conn, "SELECT * FROM medicine_stock WHERE expiry_date < CURDATE()");
 $e = mysqli_num_rows($query);
@@ -34,7 +35,7 @@ if ($ptotal != 0) {
 }
 ?>
 <!DOCTYPE html>
-<!-- Designined by CodingLab | www.youtube.com/codinglabyt -->
+
 <html lang="en" dir="ltr">
 
 <head>

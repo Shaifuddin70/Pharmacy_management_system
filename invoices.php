@@ -82,7 +82,7 @@ if (isset($_POST['delete_invoice'])) {
 <div class="container"style="margin-top: -45px;">
     <div class="title">
         <h2 class="text-center text-uppercase p-2">All Sales</h2>
-        <button onclick="purchaseReport()" class="btn btn-info"> Create Report</button>
+        <button onclick="purchaseReport()" class="btn btn-success"> Create Report</button>
         <form method="get">
             <div class="input-group date" style="margin-bottom: 20px; margin-top:10px">
                 <label for="from" class="col-form-label">Employee: </label>
