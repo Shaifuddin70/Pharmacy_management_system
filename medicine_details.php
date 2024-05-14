@@ -1,15 +1,18 @@
 <?php
 include 'nav/nav.php';
 error_reporting(0);
+
 // Check if user is authorized
 if (!isset($_SESSION['admin']) && !isset($_SESSION['stuff'])) {
     echo "<script>alert('Unauthorized Access')</script>";
     echo "<script>window.location='index.php'</script>";
     exit; // Stop execution if unauthorized
 }
+
 // Pagination variables
 $results_per_page = 10; // Number of results per page
 $offset = 0; // Starting offset
+
 // Get current page number from URL
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
@@ -17,20 +20,47 @@ if (isset($_GET['page'])) {
 } else {
     $page = 1;
 }
+
+// Get selected category, brand, or generic ID
+$catagory_id = isset($_GET['catagoryid']) ? $_GET['catagoryid'] : null;
+$brand_id = isset($_GET['brandid']) ? $_GET['brandid'] : null;
+$generic_id = isset($_GET['genericid']) ? $_GET['genericid'] : null;
+
 // Fetch medicine data with pagination
-$query = "SELECT m.medicine_id,c.catagory_name, m.medicine_name, b.brand_name, g.generic_name FROM medicine m 
+$query = "SELECT m.medicine_id, c.catagory_name, m.medicine_name, b.brand_name, g.generic_name FROM medicine m 
 JOIN medicine_brand b ON m.brand_id = b.brand_id 
 JOIN medicine_generic g ON m.generic_id = g.generic_id 
-JOIN medicine_catagory c ON m.catagory_id = c.catagory_id
-LIMIT $offset, $results_per_page";
+JOIN medicine_catagory c ON m.catagory_id = c.catagory_id";
+
+// Initialize array to store WHERE conditions
+$where_conditions = [];
+
+// Append WHERE condition based on selected IDs
+if ($catagory_id !== null) {
+    $where_conditions[] = "m.catagory_id = $catagory_id";
+}
+if ($brand_id !== null) {
+    $where_conditions[] = "m.brand_id = $brand_id";
+}
+if ($generic_id !== null) {
+    $where_conditions[] = "m.generic_id = $generic_id";
+}
+
+// If there are any conditions, concatenate them with "AND"
+if (!empty($where_conditions)) {
+    $query .= " WHERE " . implode(" AND ", $where_conditions);
+}
+
+$query .= " LIMIT $offset, $results_per_page";
+
 $data = mysqli_query($conn, $query);
+
 $total_results_query = mysqli_query($conn, "SELECT COUNT(*) AS total FROM medicine"); // Query to get total results
 $total_results_row = mysqli_fetch_assoc($total_results_query);
 $total_results = $total_results_row['total']; // Total number of results
 
 // Calculate total number of pages
 $total_pages = ceil($total_results / $results_per_page);
-
 
 // Handle delete action
 if (isset($_GET['deleteid'])) {
@@ -45,12 +75,11 @@ if (isset($_GET['deleteid'])) {
         echo "Error deleting medicine. Please try again.";
     }
 }
-
 ?>
 <div class="container">
     <div class="title">
         <h2 class="text-center text-uppercase p-2">All Medicine</h2>
-        <a href="add_medicine.php"><button href="add_medicine.php" class="col-2 btn btn-primary add_button"> Add Medicine</button></a>
+        <a href="add_medicine.php"><button class="col-2 btn btn-primary add_button"> Add Medicine</button></a>
     </div>
     <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
         <thead>
@@ -85,37 +114,34 @@ if (isset($_GET['deleteid'])) {
         </tbody>
     </table>
 
-    <?php
-    // Display pagination links
-    echo '<div class="pagination">';
-    echo '<ul class="pagination">';
+    <div class="pagination">
+        <ul class="pagination">
+            <?php
+            // Previous button
+            if ($page > 1) {
+                echo '<li class="page-item"><a class="page-link" href="medicine_details.php?page=' . ($page - 1) . '">&laquo; Previous</a></li>';
+            } else {
+                echo '<li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>';
+            }
 
-    // Previous button
-    if ($page > 1) {
-        echo '<li class="page-item"><a class="page-link" href="medicine_details.php?page=' . ($page - 1) . '">&laquo; Previous</a></li>';
-    } else {
-        echo '<li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>';
-    }
+            // Page numbers
+            for ($i = 1; $i <= $total_pages; $i++) {
+                if ($i == $page) {
+                    echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
+                } else {
+                    echo '<li class="page-item"><a class="page-link" href="medicine_details.php?page=' . $i . '">' . $i . '</a></li>';
+                }
+            }
 
-    // Page numbers
-    for ($i = 1; $i <= $total_pages; $i++) {
-        if ($i == $page) {
-            echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
-        } else {
-            echo '<li class="page-item"><a class="page-link" href="medicine_details.php?page=' . $i . '">' . $i . '</a></li>';
-        }
-    }
-
-    // Next button
-    if ($page < $total_pages) {
-        echo '<li class="page-item"><a class="page-link" href="medicine_details.php?page=' . ($page + 1) . '">Next &raquo;</a></li>';
-    } else {
-        echo '<li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>';
-    }
-
-    echo '</ul>';
-    echo '</div>';
-    ?>
+            // Next button
+            if ($page < $total_pages) {
+                echo '<li class="page-item"><a class="page-link" href="medicine_details.php?page=' . ($page + 1) . '">Next &raquo;</a></li>';
+            } else {
+                echo '<li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>';
+            }
+            ?>
+        </ul>
+    </div>
 
     <?php
     include 'nav/footer.php';

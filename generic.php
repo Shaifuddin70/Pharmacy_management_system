@@ -55,7 +55,7 @@ $total_pages = ceil($total_results / $results_per_page);
                         <td>' . $c . '</td>
                         <td>' . $result['generic_name'] . '</td>
                         <td>
-                            <a href="view.php?selectid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-primary"><i class="uil uil-eye"></i></button></a>
+                            <a href="medicine_details.php?genericid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-primary"><i class="uil uil-eye"></i></button></a>
                             <a href="cupdate.php?updateid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
                             <a href="cdelete.php?deleteid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-danger"><i class="bx bxs-trash"></i></button></a>
                         </td>
