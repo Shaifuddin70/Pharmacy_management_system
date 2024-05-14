@@ -75,7 +75,7 @@ if(isset($_GET['customer_id']) && is_numeric($_GET['customer_id'])) {
                     <th>Date</th>
                     <th id="visible">Details</th>
                     <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
-                        <th id="visible">Action</th>
+                        <th id="visible">Action </th>
                     <?php endif; ?>
                 </tr>
             </thead>
