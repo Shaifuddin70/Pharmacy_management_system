@@ -57,7 +57,9 @@ if(isset($_GET['customer_id']) && is_numeric($_GET['customer_id'])) {
 <div class="container" style="margin-top: -45px;">
     <div class="title">
         <h2 class="text-center text-uppercase p-2">All Sales</h2>
-        <button onclick="purchaseReport()" class="btn btn-success mb-3"> Create Report</button>
+        <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
+            <button onclick="purchaseReport()" class="btn btn-success mb-3"> Create Report</button>
+        <?php endif; ?>
     </div>
     <div id="table">
         <h2 id="invisible" class="d-none text-center text-uppercase p-2">Sales Report</h2>
@@ -72,7 +74,9 @@ if(isset($_GET['customer_id']) && is_numeric($_GET['customer_id'])) {
                     <th>Subtotal</th>
                     <th>Date</th>
                     <th id="visible">Details</th>
-                    <th id="visible">Action</th>
+                    <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
+                        <th id="visible">Action</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -89,12 +93,14 @@ if(isset($_GET['customer_id']) && is_numeric($_GET['customer_id'])) {
                         <td><?php echo $row['subtotal']; ?></td>
                         <td><?php echo date('Y-m-d', strtotime($row['created_at'])); ?></td>
                         <td id="visible"><a href="invoice_details.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
-                        <td id="visible">
-                            <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.');">
-                                <input type="hidden" name="invoice_id" value="<?php echo $row['invoice_id']; ?>">
-                                <button class="btn btn-danger" name="delete_invoice">Delete</button>
-                            </form>
-                        </td>
+                        <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
+                            <td id="visible">
+                                <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.');">
+                                    <input type="hidden" name="invoice_id" value="<?php echo $row['invoice_id']; ?>">
+                                    <button class="btn btn-danger" name="delete_invoice">Delete</button>
+                                </form>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

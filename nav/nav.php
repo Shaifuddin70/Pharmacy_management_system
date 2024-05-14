@@ -253,20 +253,7 @@ if ($ptotal != 0) {
               
             </ul>
           </li>
-          <li>
-            <a href="expired.php">
-            <i class="bx bxs-package" ></i>
-              <span class="link_name">Expired</span>';
-           
-                        if ($e != 0) echo '
-                            <span style="position: absolute; top: -0.1px;left: 110px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
-                            ' . $e . '</span>' ;
-           echo' </a>
-            <ul class="sub-menu blank">
-              <li><a class="link_name" href="expired.php">Out Of Stock</a></li>
-              
-            </ul>
-          </li>
+          
           <li>
             <div class="iocn-link">
               <a href="add_order.php">
