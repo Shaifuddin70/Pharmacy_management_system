@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2024 at 05:48 PM
+-- Generation Time: May 14, 2024 at 06:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,39 +35,6 @@ CREATE TABLE `customer` (
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `customer`
---
-
-INSERT INTO `customer` (`customer_id`, `customer_name`, `customer_email`, `customer_number`, `date`) VALUES
-(1, 'chaity', 'chaity@gmail.com', '01635485721', '2024-03-29 17:18:30'),
-(2, 'scot', 'scot@gmail.com', '1326548654', '2024-03-29 17:30:28'),
-(11, 'Shaifuddin Ahammed', 'majinshifu@gmail.com', '01538347152', '2024-05-03 15:27:01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `department`
---
-
-CREATE TABLE `department` (
-  `id` int(100) NOT NULL,
-  `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `department`
---
-
-INSERT INTO `department` (`id`, `name`) VALUES
-(3, 'Administation'),
-(5, 'RND'),
-(6, 'Web Development'),
-(7, 'Software Development'),
-(8, 'Research'),
-(12, 'Stuff'),
-(13, 'Store Executive');
-
 -- --------------------------------------------------------
 
 --
@@ -89,10 +56,7 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`id`, `name`, `number`, `email`, `password`, `role`, `date`) VALUES
-(1, 'Tahira', 176548526, 'chaity@gmail.com', '$2y$10$8d4sVVLZb.zyG1g12YASE.4GeFjcZOK5wZdpBlDtkpYjCyQDUnC22', 1, '2024-03-29 17:16:26'),
-(32, 'Rohim', 2147483647, 'rohim@gmail.com', '$2y$10$OmDy9R0yxrJRQ/ZXyYWSo.z.jjDlKCCJNLbT.SfE5LCn0isrmyAtK', 2, '2024-03-29 17:16:26'),
-(34, 'Karim', 165842563, 'karim@gmail.com', '$2y$10$CRDucZaJ4MbUnv0c1ZCqA.JNI2aBMI/v1FsxZqnrBbQH9ufe1UjXe', 2, '2024-03-29 17:16:26'),
-(35, 'Salim', 168569542, 'salim@gmail.com', '$2y$10$uoTQM7kssEOjkZcjmkh.4eksOxyML9U0QMWaqLuK1k2HhTjNcMH02', 2, '2024-03-29 17:16:26');
+(1, 'Tahira', 176548526, 'chaity@gmail.com', '$2y$10$8d4sVVLZb.zyG1g12YASE.4GeFjcZOK5wZdpBlDtkpYjCyQDUnC22', 1, '2024-03-29 17:16:26');
 
 -- --------------------------------------------------------
 
@@ -111,25 +75,6 @@ CREATE TABLE `invoices` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `invoices`
---
-
-INSERT INTO `invoices` (`invoice_id`, `employee_id`, `customer_id`, `total`, `discount`, `subtotal`, `profit`, `created_at`) VALUES
-(100, 1, 2, 4950.00, 5.00, 4702.50, 203, '2024-04-17 12:42:33'),
-(101, 1, 1, 4135.00, 5.00, 3928.25, 419, '2024-04-17 13:11:51'),
-(103, 1, 1, 825.00, 5.00, 783.75, 34, '2024-04-17 15:47:38'),
-(104, 1, 1, 5400.00, 5.00, 5130.00, 630, '2024-04-17 15:49:18'),
-(105, 1, 2, 1925.00, 5.00, 1828.75, -171, '2024-04-19 18:59:01'),
-(106, 1, 1, 275.00, 5.00, 261.25, 11, '2024-05-01 06:51:09'),
-(107, 1, 1, 300.00, 5.00, 285.00, 35, '2024-05-01 06:51:35'),
-(108, 1, 1, 275.00, 5.00, 261.25, 11, '2024-05-01 06:53:59'),
-(110, 1, 1, 930.00, 5.00, 883.50, 84, '2024-05-03 14:24:43'),
-(111, 1, 2, 550.00, 5.00, 522.50, 23, '2024-05-03 14:27:53'),
-(112, 1, 1, 300.00, 5.00, 285.00, 35, '2024-05-03 14:29:05'),
-(114, 1, 1, 275.00, 5.00, 261.25, 11, '2024-05-03 14:34:47'),
-(115, 34, 11, 1800.00, 5.00, 1710.00, 210, '2024-05-03 15:27:20');
-
 -- --------------------------------------------------------
 
 --
@@ -143,35 +88,6 @@ CREATE TABLE `invoice_items` (
   `quantity` int(11) NOT NULL,
   `total_price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `invoice_items`
---
-
-INSERT INTO `invoice_items` (`invoice_item_id`, `invoice_id`, `medicine_id`, `quantity`, `total_price`) VALUES
-(154, 100, 4, 90, 4950.00),
-(155, 101, 4, 5, 275.00),
-(156, 101, 5, 40, 2150.00),
-(157, 101, 8, 1, 610.00),
-(158, 101, 10, 10, 600.00),
-(159, 101, 12, 5, 500.00),
-(161, 103, 4, 10, 550.00),
-(163, 103, 5, 5, 275.00),
-(164, 104, 10, 90, 5400.00),
-(165, 105, 5, 40, 1925.00),
-(166, 106, 4, 5, 275.00),
-(167, 107, 5, 5, 300.00),
-(168, 108, 4, 5, 275.00),
-(170, 110, 4, 10, 550.00),
-(171, 110, 8, 5, 0.00),
-(172, 110, 9, 1, 55.00),
-(173, 110, 10, 5, 325.00),
-(174, 111, 4, 10, 550.00),
-(175, 112, 5, 5, 300.00),
-(176, 114, 4, 5, 275.00),
-(177, 115, 4, 10, 550.00),
-(178, 115, 5, 10, 600.00),
-(179, 115, 10, 10, 650.00);
 
 -- --------------------------------------------------------
 
@@ -214,14 +130,6 @@ CREATE TABLE `medicine_brand` (
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `medicine_brand`
---
-
-INSERT INTO `medicine_brand` (`brand_id`, `brand_name`, `date`) VALUES
-(1, 'Incepta', '2024-03-25 08:11:22'),
-(2, 'Abdolax', '2024-03-25 08:12:17');
-
 -- --------------------------------------------------------
 
 --
@@ -234,16 +142,6 @@ CREATE TABLE `medicine_catagory` (
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `medicine_catagory`
---
-
-INSERT INTO `medicine_catagory` (`catagory_id`, `catagory_name`, `date`) VALUES
-(1, 'Tablet', '2024-03-27 09:44:37'),
-(2, 'Capsule', '2024-03-27 09:45:11'),
-(4, 'Injection', '2024-03-27 09:45:26'),
-(5, 'Syrup', '2024-03-29 16:50:25');
-
 -- --------------------------------------------------------
 
 --
@@ -255,15 +153,6 @@ CREATE TABLE `medicine_generic` (
   `generic_name` varchar(100) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `medicine_generic`
---
-
-INSERT INTO `medicine_generic` (`generic_id`, `generic_name`, `date`) VALUES
-(1, 'Paracetamol', '2024-03-25 07:39:00'),
-(2, 'esomeprazol', '2024-03-25 07:39:20'),
-(6, 'Thiamine Mononitrate', '2024-03-25 08:00:36');
 
 -- --------------------------------------------------------
 
@@ -283,16 +172,6 @@ CREATE TABLE `medicine_stock` (
   `shelf_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `medicine_stock`
---
-
-INSERT INTO `medicine_stock` (`stock_id`, `medicine_id`, `supplier_id`, `unit`, `expiry_date`, `pprice`, `sprice`, `date`, `shelf_id`) VALUES
-(1, 4, 1, 4828, '2024-05-11', 50, 55, '2024-03-25 13:15:32', 6),
-(33, 9, 1, 1047, '2024-05-03', 50, 55, '2024-04-07 23:07:57', 1),
-(34, 5, 1, 140, '2024-05-11', 50, 60, '2024-04-07 23:24:49', 6),
-(36, 10, 2, 85, '2026-11-03', 50, 65, '2024-05-02 10:25:35', 6);
-
 -- --------------------------------------------------------
 
 --
@@ -309,31 +188,6 @@ CREATE TABLE `purchase_table` (
   `status` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `purchase_table`
---
-
-INSERT INTO `purchase_table` (`id`, `medicine_id`, `unit`, `pprice`, `sprice`, `date`, `status`) VALUES
-(58, 9, 100, 40, 50, '2024-04-08', 1),
-(59, 10, 10, 35, 50, '2024-04-08', 1),
-(60, 9, 100, 40, 10, '2024-04-08', 1),
-(61, 4, 10, 5, 6, '2024-04-08', 1),
-(62, 4, 10, 10, 15, '2024-04-08', 1),
-(63, 4, 50, 10, 15, '2024-04-08', 1),
-(64, 4, 5000, 50, 55, '2024-04-08', 1),
-(65, 12, 500, 50, 100, '2024-04-08', 1),
-(66, 11, 10, 50, 60, '2024-04-08', 1),
-(67, 9, 50, 50, 55, '2024-04-08', 1),
-(68, 10, 50, 50, 55, '2024-04-08', 1),
-(69, 5, 100, 50, 55, '2024-04-08', 1),
-(70, 10, 50, 50, 60, '2024-04-13', 1),
-(71, 8, 100, 510, 610, '2024-04-16', 1),
-(72, 8, 100, 510, 620, '2024-04-17', 1),
-(73, 10, 100, 500, 650, '2024-04-17', 1),
-(74, 5, 100, 50, 60, '2024-04-20', 1),
-(75, 10, 100, 50, 65, '2024-05-02', 1),
-(76, 9, 56, 50, 55, '2024-05-02', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -347,25 +201,6 @@ CREATE TABLE `return_table` (
   `quantity` int(10) NOT NULL,
   `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `return_table`
---
-
-INSERT INTO `return_table` (`id`, `employee_id`, `item_id`, `quantity`, `date`) VALUES
-(19, 32, 18, 2, '2022-12-23'),
-(20, 32, 21, 2, '2022-12-23'),
-(21, 32, 24, 2, '2022-12-23'),
-(23, 32, 18, 2, '2022-12-23'),
-(24, 1, 24, 50, '2022-12-23'),
-(25, 1, 18, 1, '2022-12-23'),
-(26, 1, 18, 1, '2022-12-23'),
-(27, 1, 18, 1, '2022-12-23'),
-(28, 1, 18, 1, '2022-12-23'),
-(29, 1, 18, 1, '2022-12-23'),
-(30, 1, 18, 1, '2022-12-24'),
-(31, 1, 18, 65, '2022-12-24'),
-(34, 32, 18, 66, '2022-12-24');
 
 -- --------------------------------------------------------
 
@@ -422,14 +257,6 @@ CREATE TABLE `supplier` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `supplier`
---
-
-INSERT INTO `supplier` (`supplier_id`, `supplier_name`, `supplier_number`, `supplier_email`, `creation_date`) VALUES
-(1, 'HOME COOKED', '01538347152', 'rokib2064@gmail.com', '2024-05-02 15:17:45'),
-(2, 'Shaifuddin Ahammed Rokib', '01635485720', 'shaifuddin70@gmail.com', '2024-05-02 16:04:12');
-
---
 -- Indexes for dumped tables
 --
 
@@ -438,12 +265,6 @@ INSERT INTO `supplier` (`supplier_id`, `supplier_name`, `supplier_number`, `supp
 --
 ALTER TABLE `customer`
   ADD PRIMARY KEY (`customer_id`);
-
---
--- Indexes for table `department`
---
-ALTER TABLE `department`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `employee`
@@ -541,13 +362,7 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `department`
---
-ALTER TABLE `department`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `employee`
@@ -559,13 +374,13 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
+  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=187;
 
 --
 -- AUTO_INCREMENT for table `medicine`
@@ -595,13 +410,13 @@ ALTER TABLE `medicine_generic`
 -- AUTO_INCREMENT for table `medicine_stock`
 --
 ALTER TABLE `medicine_stock`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `purchase_table`
 --
 ALTER TABLE `purchase_table`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT for table `return_table`
