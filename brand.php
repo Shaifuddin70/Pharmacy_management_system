@@ -8,6 +8,26 @@ if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
     exit(); // Stop further execution
 }
 
+// Check if deleteid is set in the URL
+if (isset($_GET['deleteid'])) {
+    // Sanitize the input to prevent SQL injection
+    $deleteId = mysqli_real_escape_string($conn, $_GET['deleteid']);
+
+    // Prepare and execute the delete query
+    $deleteQuery = "DELETE FROM medicine_brand WHERE brand_id = '$deleteId'";
+    if (mysqli_query($conn, $deleteQuery)) {
+        // If deletion is successful, redirect back to the same page with a success message
+        echo "<script>alert('Brand deleted successfully');</script>";
+        echo "<script>window.location='brand.php';</script>";
+        exit(); // Stop further execution
+    } else {
+        // If deletion fails, show an error message
+        echo "<script>alert('Failed to delete brand. Please try again.');</script>";
+    }
+}
+
+
+
 // Pagination variables
 $results_per_page = 10; // Number of results per page
 $offset = 0; // Starting offset
@@ -55,8 +75,8 @@ $total_pages = ceil($total_results / $results_per_page);
                         <td>' . $result['brand_name'] . '</td>
                         <td>
                             <a href="medicine_details.php?brandid=' . $result['brand_id'] . '" class="text-light"><button class="btn btn-primary"><i class="uil uil-eye"></i></button></a>
-                            <a href="cupdate.php?updateid=' . $result['brand_id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
-                            <a href="cdelete.php?deleteid=' . $result['brand_id'] . '" class="text-light"><button class="btn btn-danger"><i class="bx bxs-trash"></i></button></a>
+                            <a href="bupdate.php?updateid=' . $result['brand_id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
+                            <a href="brand.php?deleteid=' . $result['brand_id'] . '" class="text-light"><button class="btn btn-danger"><i class="bx bxs-trash"></i></button></a>
                         </td>
                     </tr>';
                     $c++;

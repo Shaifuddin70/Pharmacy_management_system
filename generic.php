@@ -8,6 +8,27 @@ if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
     exit(); // Stop further execution
 }
 
+// Check if deleteid is set in the URL
+if (isset($_GET['deleteid'])) {
+    // Include your database connection file
+    include 'your_database_connection.php';
+
+    // Sanitize the input to prevent SQL injection
+    $deleteId = mysqli_real_escape_string($conn, $_GET['deleteid']);
+
+    // Prepare and execute the delete query
+    $deleteQuery = "DELETE FROM medicine_generic WHERE generic_id = '$deleteId'";
+    if (mysqli_query($conn, $deleteQuery)) {
+        // If deletion is successful, redirect back to the same page with a success message
+        echo "<script>alert('Generic deleted successfully');</script>";
+        echo "<script>window.location='generic.php';</script>";
+        exit(); // Stop further execution
+    } else {
+        // If deletion fails, show an error message
+        echo "<script>alert('Failed to delete generic. Please try again.');</script>";
+    }
+}
+
 // Pagination variables
 $results_per_page = 10; // Number of results per page
 $offset = 0; // Starting offset
@@ -56,8 +77,8 @@ $total_pages = ceil($total_results / $results_per_page);
                         <td>' . $result['generic_name'] . '</td>
                         <td>
                             <a href="medicine_details.php?genericid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-primary"><i class="uil uil-eye"></i></button></a>
-                            <a href="cupdate.php?updateid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
-                            <a href="cdelete.php?deleteid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-danger"><i class="bx bxs-trash"></i></button></a>
+                            <a href="gupdate.php?updateid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-primary"><i class="bx bxs-edit-alt"></i></button></a>
+                            <a href="generic.php?deleteid=' . $result['generic_id'] . '" class="text-light"><button class="btn btn-danger"><i class="bx bxs-trash"></i></button></a>
                         </td>
                     </tr>';
                     $c++;

@@ -1,17 +1,13 @@
 <?php 
 include 'nav/nav.php';
-
-if(isset($_SESSION['stuff'])) {
-    
+if(isset($_SESSION['stuff'])) {   
 } elseif(isset($_SESSION['admin'])) {
-
 } else {
     echo "<script>alert('Unauthorized Access')</script>";
     echo "<script>window.location='index.php'</script>";
     exit; // Stop execution if unauthorized
 }
 ?>
-
 <form method="post">        
     <div class="container">
         <h2 class="text-center text-uppercase p-2">Purchase Medicine</h2>
@@ -27,7 +23,7 @@ if(isset($_SESSION['stuff'])) {
                     $catagory_query = "SELECT * FROM medicine_catagory";
                     $catagory_result = mysqli_query($conn, $catagory_query);
                     ?>
-                    <select class="form-control form-control-lg" aria-label="Default select example" name="catagory" id="catagory">
+                    <select class="form-control form-control-lg" aria-label="Default select example" name="catagory" id="catagory"  required>
                         <option selected disabled>Select Catagory</option>
                         <?php while ($row = mysqli_fetch_assoc($catagory_result)) : ?>
                             <option value="<?php echo $row['catagory_id']; ?>"> <?php echo $row['catagory_name']; ?> </option>
@@ -35,12 +31,12 @@ if(isset($_SESSION['stuff'])) {
                     </select>
                 </td>
                 <td>
-                    <select class="form-control form-control-lg" aria-label="Default select example" name="medicine" id="medicine">
+                    <select class="form-control form-control-lg" aria-label="Default select example" name="medicine" id="medicine" required>
                         <option selected disabled>Select Medicine</option>
                     </select>
                 </td>
                 <td> 
-                    <input type="text" class="form-control form-control-lg" required="true" name="quantity" placeholder="Medicine Quantity">
+                    <input type="text" class="form-control form-control-lg" required="true" name="quantity" placeholder="Medicine Quantity" required>
                 </td>
             </tr>
         </table>
