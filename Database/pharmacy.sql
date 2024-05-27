@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2024 at 06:37 PM
+-- Generation Time: May 27, 2024 at 07:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -224,7 +224,8 @@ CREATE TABLE `medicine_stock` (
 --
 
 INSERT INTO `medicine_stock` (`stock_id`, `medicine_id`, `supplier_id`, `unit`, `expiry_date`, `pprice`, `sprice`, `date`, `shelf_id`) VALUES
-(38, 15, 3, 9994, '2024-05-30', 2, 3, '2024-05-27 16:24:48', 1);
+(38, 15, 3, 9994, '2024-05-30', 2, 3, '2024-05-27 16:24:48', 1),
+(39, 16, 3, 45, '2024-05-31', 5, 7, '2024-05-27 17:15:05', 1);
 
 -- --------------------------------------------------------
 
@@ -247,7 +248,8 @@ CREATE TABLE `purchase_table` (
 --
 
 INSERT INTO `purchase_table` (`id`, `medicine_id`, `unit`, `pprice`, `sprice`, `date`, `status`) VALUES
-(80, 15, 10000, 2, 3, '2024-05-27', 1);
+(80, 15, 10000, 2, 3, '2024-05-27', 1),
+(81, 16, 45, 5, 7, '2024-05-27', 1);
 
 -- --------------------------------------------------------
 
@@ -478,13 +480,13 @@ ALTER TABLE `medicine_generic`
 -- AUTO_INCREMENT for table `medicine_stock`
 --
 ALTER TABLE `medicine_stock`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `purchase_table`
 --
 ALTER TABLE `purchase_table`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `return_table`
