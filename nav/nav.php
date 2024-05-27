@@ -198,6 +198,16 @@ if ($ptotal != 0) {
             <li><a class="link_name" href="employee.php">Employee</a></li>
           </ul>
         </li>
+        <li>
+          <a href="report.php">
+          <i class="bx bxs-report"></i>
+            <span class="link_name">Reports</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="report.php">Reports</a></li>
+          </ul>
+        </li>
+
           <li>
            
             ';

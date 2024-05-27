@@ -1,30 +1,54 @@
 /* Google Fonts Import Link */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-
+  font-family: "Poppins", sans-serif;
 }
 
 .add_button {
   position: relative;
   margin-left: 925px;
   margin-bottom: 10px;
-
 }
-.tt{
-  border-radius: 24px;background: #03274d;padding: 10px 20px; border: none;
+.tt {
+  border-radius: 24px;
+  background: #03274d;
+  padding: 10px 20px;
+  border: none;
 }
-.customer{
-  margin-top: 5px!important;
+.customer {
+  margin-top: 5px !important;
   display: flex;
   font-weight: 500;
   font-size: large;
 }
 
+.custom {
+  color: rgb(0, 0, 0) !important;
+  height: 100px;
+}
+.custom-box {
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgb(156, 156, 156);
+}
+.custom-box i {
+  font-size: 40px;
+  color: rgb(55, 63, 63);
+  background-color: aquamarine;
+  padding: 10px;
+  border-radius: 20px;
+}
+.custom-box a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+.custom-box a:hover {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
 
 .sidebar {
   position: fixed;
@@ -107,7 +131,7 @@
 }
 
 .sidebar.close .nav-links li .iocn-link {
-  display: block
+  display: block;
 }
 
 .sidebar .nav-links li i {
@@ -138,7 +162,7 @@
 .sidebar .nav-links li a .link_name {
   font-size: 18px;
   font-weight: 400;
-  color: #fff!important;
+  color: #fff !important;
   transition: all 0.4s ease;
 }
 
@@ -283,7 +307,7 @@
   overflow: auto;
 }
 
-.sidebar.close~.home-section {
+.sidebar.close ~ .home-section {
   left: 38px;
   width: calc(100% - 78px);
 }
@@ -336,7 +360,7 @@
     width: calc(100% - 240px);
   }
 
-  .sidebar.close~.home-section {
+  .sidebar.close ~ .home-section {
     left: 78px;
     width: calc(100% - 78px);
   }
@@ -346,7 +370,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 body {
@@ -354,7 +377,6 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-
 }
 
 .form {
@@ -366,7 +388,6 @@ body {
   padding: 50px 40px;
   display: flex;
   flex-direction: column;
-
 }
 
 .form {
@@ -385,7 +406,6 @@ body {
   text-align: center;
 }
 
-
 .inputbox {
   position: relative;
   width: 300px;
@@ -401,7 +421,7 @@ body {
   border-radius: 10px;
   outline: none;
   color: rgb(0, 0, 0);
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
   z-index: 10;
 }
 
@@ -412,13 +432,8 @@ body {
   padding: 0px 10px 0px;
   font-size: 1em;
   pointer-events: none;
-  transition: .05s;
+  transition: 0.05s;
 }
-
-
-
-
-
 
 .link {
   display: flex;
@@ -430,12 +445,10 @@ body {
   font-size: 1em;
   padding: 10px 0px 20px;
   color: rgb(50, 62, 71);
-
 }
 
 .link a:hover {
   color: rgb(0, 0, 0);
-
 }
 
 button[type="submit"] {
@@ -443,7 +456,7 @@ button[type="submit"] {
   outline: none;
   color: aliceblue;
   align-items: center;
-  background:  #03274d;
+  background: #03274d;
   padding: 11px 25px;
   width: 300px;
   cursor: pointer;
