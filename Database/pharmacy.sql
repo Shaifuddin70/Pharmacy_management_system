@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 14, 2024 at 06:23 PM
+-- Generation Time: May 27, 2024 at 06:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,6 +34,13 @@ CREATE TABLE `customer` (
   `customer_number` varchar(100) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`customer_id`, `customer_name`, `customer_email`, `customer_number`, `date`) VALUES
+(13, 'HOME COOKED', 'rokib2064@gmail.com', '01635485720', '2024-05-27 16:25:11');
 
 -- --------------------------------------------------------
 
@@ -75,6 +82,13 @@ CREATE TABLE `invoices` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `invoices`
+--
+
+INSERT INTO `invoices` (`invoice_id`, `employee_id`, `customer_id`, `total`, `discount`, `subtotal`, `profit`, `created_at`) VALUES
+(1, 1, 13, 18.00, 3.00, 17.46, 5, '2024-05-27 16:26:06');
+
 -- --------------------------------------------------------
 
 --
@@ -88,6 +102,13 @@ CREATE TABLE `invoice_items` (
   `quantity` int(11) NOT NULL,
   `total_price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `invoice_items`
+--
+
+INSERT INTO `invoice_items` (`invoice_item_id`, `invoice_id`, `medicine_id`, `quantity`, `total_price`) VALUES
+(187, 1, 15, 6, 18.00);
 
 -- --------------------------------------------------------
 
@@ -116,7 +137,9 @@ INSERT INTO `medicine` (`medicine_id`, `catagory_id`, `medicine_name`, `brand_id
 (10, 5, 'MG+', 2, 2, '2024-03-30 12:57:22'),
 (12, 4, 'Tasty', 2, 2, '2024-04-07 22:33:39'),
 (13, 2, 'test', 1, 2, '2024-04-17 15:46:33'),
-(14, 1, 'test1', 1, 1, '2024-04-19 18:53:31');
+(14, 1, 'test1', 1, 1, '2024-04-19 18:53:31'),
+(15, 7, 'Napa', 3, 7, '2024-05-27 15:23:05'),
+(16, 7, 'Sergel 20Mg', 3, 8, '2024-05-27 15:23:12');
 
 -- --------------------------------------------------------
 
@@ -130,6 +153,13 @@ CREATE TABLE `medicine_brand` (
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `medicine_brand`
+--
+
+INSERT INTO `medicine_brand` (`brand_id`, `brand_name`, `date`) VALUES
+(3, 'SMC', '2024-05-27 15:20:01');
+
 -- --------------------------------------------------------
 
 --
@@ -142,6 +172,15 @@ CREATE TABLE `medicine_catagory` (
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `medicine_catagory`
+--
+
+INSERT INTO `medicine_catagory` (`catagory_id`, `catagory_name`, `date`) VALUES
+(6, 'Syrup', '2024-05-27 15:04:50'),
+(7, 'Tablet', '2024-05-27 15:04:54'),
+(8, 'Capsule', '2024-05-27 15:05:02');
+
 -- --------------------------------------------------------
 
 --
@@ -153,6 +192,14 @@ CREATE TABLE `medicine_generic` (
   `generic_name` varchar(100) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `medicine_generic`
+--
+
+INSERT INTO `medicine_generic` (`generic_id`, `generic_name`, `date`) VALUES
+(7, 'Paracetamol', '2024-05-27 15:20:15'),
+(8, 'Esoprazol', '2024-05-27 15:20:18');
 
 -- --------------------------------------------------------
 
@@ -172,6 +219,13 @@ CREATE TABLE `medicine_stock` (
   `shelf_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `medicine_stock`
+--
+
+INSERT INTO `medicine_stock` (`stock_id`, `medicine_id`, `supplier_id`, `unit`, `expiry_date`, `pprice`, `sprice`, `date`, `shelf_id`) VALUES
+(38, 15, 3, 9994, '2024-05-30', 2, 3, '2024-05-27 16:24:48', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -187,6 +241,13 @@ CREATE TABLE `purchase_table` (
   `date` date NOT NULL DEFAULT current_timestamp(),
   `status` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `purchase_table`
+--
+
+INSERT INTO `purchase_table` (`id`, `medicine_id`, `unit`, `pprice`, `sprice`, `date`, `status`) VALUES
+(80, 15, 10000, 2, 3, '2024-05-27', 1);
 
 -- --------------------------------------------------------
 
@@ -255,6 +316,13 @@ CREATE TABLE `supplier` (
   `supplier_email` varchar(100) NOT NULL,
   `creation_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `supplier`
+--
+
+INSERT INTO `supplier` (`supplier_id`, `supplier_name`, `supplier_number`, `supplier_email`, `creation_date`) VALUES
+(3, 'Shaifuddin Ahammed Rokib', '01635485720', 'shaifuddin70@gmail.com', '2024-05-27 22:23:40');
 
 --
 -- Indexes for dumped tables
@@ -362,7 +430,7 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `employee`
@@ -374,49 +442,49 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=187;
+  MODIFY `invoice_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
 
 --
 -- AUTO_INCREMENT for table `medicine`
 --
 ALTER TABLE `medicine`
-  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `medicine_brand`
 --
 ALTER TABLE `medicine_brand`
-  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `medicine_catagory`
 --
 ALTER TABLE `medicine_catagory`
-  MODIFY `catagory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `catagory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `medicine_generic`
 --
 ALTER TABLE `medicine_generic`
-  MODIFY `generic_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `generic_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `medicine_stock`
 --
 ALTER TABLE `medicine_stock`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `purchase_table`
 --
 ALTER TABLE `purchase_table`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `return_table`
@@ -440,24 +508,7 @@ ALTER TABLE `shelf`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `invoices`
---
-ALTER TABLE `invoices`
-  ADD CONSTRAINT `invoices_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`);
-
---
--- Constraints for table `invoice_items`
---
-ALTER TABLE `invoice_items`
-  ADD CONSTRAINT `invoice_items_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`invoice_id`),
-  ADD CONSTRAINT `invoice_items_ibfk_2` FOREIGN KEY (`medicine_id`) REFERENCES `medicine` (`medicine_id`);
+  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
