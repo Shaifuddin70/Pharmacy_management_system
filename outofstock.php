@@ -66,7 +66,7 @@ $data = mysqli_query($conn, $sql);
 <div class="container">
     <h2 class="text-center text-uppercase p-2">All Stock Items</h2>
 
-    
+
 
     <div id="table">
         <h2 id="invisible" class="d-none">Stock Report</h2>
@@ -101,7 +101,7 @@ $data = mysqli_query($conn, $sql);
                         <td>' . $result['unit'] . '</td>
                         <td>' . $result['expiry_date'] . '</td>
                         <td>' . $result['shelf_number'] . '</td>
-                        <td><a href="purchase.php" class="text-light"><button class="btn btn-primary">Buy Now</button></a></td>
+                        <td><a href="purchase.php" class="text-light"><button class="btn btn-primary">Purchase</button></a></td>
                     </tr>';
                         $c++;
                     }

@@ -67,7 +67,7 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
 </head>
 <div class="home-content">
     <div class="overview-boxes">
-        <div class="box">
+        <div class="box1 box">
             <div class="right-side">
                 <div class="box-topic">Total Order</div>
                 <div class="number"><?php echo $total_orders; ?></div>
@@ -78,7 +78,7 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
             </div>
             <i class="bx bx-cart-alt cart"></i>
         </div>
-        <div class="box">
+        <div class="box2 box">
             <div class="right-side">
                 <div class="box-topic">Total Sales</div>
                 <div class="number"><?php echo $total_sales; ?></div>
@@ -89,7 +89,7 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
             </div>
             <i class="bx bxs-cart-add cart two"></i>
         </div>
-        <div class="box">
+        <div class="box3 box">
             <div class="right-side">
                 <div class="box-topic">Total Profit</div>
                 <div class="number"><?php echo $total_profit; ?></div>
@@ -100,7 +100,7 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
             </div>
             <i class="bx bx-cart cart three"></i>
         </div>
-        <div class="box">
+        <div class="box4 box">
             <div class="right-side">
                 <div class="box-topic">Total Purchase</div>
                 <div class="number"><?php echo $total_purchase; ?></div>
@@ -124,7 +124,7 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
                         echo "<tr><th>Date</th><th>Invoice ID</th><th>Customer</th><th>Total Amount</th></tr>";
                         while ($row_invoice = $result_recent_invoices->fetch_assoc()) {
                             echo "<tr>";
-                            echo "<td>". date('Y-m-d', strtotime($row_invoice['created_at'])) . "</td>";
+                            echo "<td>" . date('Y-m-d', strtotime($row_invoice['created_at'])) . "</td>";
                             echo "<td>" . $row_invoice['invoice_id'] . "</td>";
                             echo "<td>" . $row_invoice['customer_name'] . "</td>";
                             echo "<td>" . $row_invoice['subtotal'] . "</td>";
@@ -141,34 +141,34 @@ $result_recent_invoices = $conn->query($sql_recent_invoices);
             </div>
         </div>
         <div class="top-sales box">
-    <div class="title text-center">Top Selling Medicine</div>
-    <table id="zctb" class="display table  table-hover text-center border" cellspacing="0" width="100%">
-        <tr>
-            <th>Medicine Name</th>
-            <th>Total Quantity Sold</th>
-        </tr>
-        <?php
-        // Fetch top-selling medicines
-        $sql_top_medicines = "SELECT m.medicine_name, SUM(i.quantity) as total_quantity 
+            <div class="title text-center">Top Selling Medicine</div>
+            <table id="zctb" class="display table  table-hover text-center border" cellspacing="0" width="100%">
+                <tr>
+                    <th>Medicine Name</th>
+                    <th>Total Quantity Sold</th>
+                </tr>
+                <?php
+                // Fetch top-selling medicines
+                $sql_top_medicines = "SELECT m.medicine_name, SUM(i.quantity) as total_quantity 
                               FROM invoice_items i 
                               INNER JOIN medicine m ON i.medicine_id = m.medicine_id 
                               GROUP BY i.medicine_id 
                               ORDER BY total_quantity DESC 
                               LIMIT 5";
-        $result_top_medicines = $conn->query($sql_top_medicines);
-        if ($result_top_medicines && $result_top_medicines->num_rows > 0) {
-            while ($row_top_medicines = $result_top_medicines->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row_top_medicines['medicine_name'] . "</td>";
-                echo "<td>" . $row_top_medicines['total_quantity'] . "</td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='2'>No top selling medicine found.</td></tr>";
-        }
-        ?>
-    </table>
-</div>
+                $result_top_medicines = $conn->query($sql_top_medicines);
+                if ($result_top_medicines && $result_top_medicines->num_rows > 0) {
+                    while ($row_top_medicines = $result_top_medicines->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row_top_medicines['medicine_name'] . "</td>";
+                        echo "<td>" . $row_top_medicines['total_quantity'] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='2'>No top selling medicine found.</td></tr>";
+                }
+                ?>
+            </table>
+        </div>
 
 
     </div>

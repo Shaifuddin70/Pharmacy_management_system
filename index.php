@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Login</title>
+    <title>Pharmacy management system</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="nav/style.css">
@@ -10,8 +10,10 @@
 </head>
 
 <body>
-    <form method="post">
 
+
+
+    <form method="post">
         <div class="form">
             <h2>Sign In</h2>
             <div class="inputbox">
@@ -28,6 +30,8 @@
             </div>
         </div>
     </form>
+
+
 </body>
 
 </html>
@@ -56,7 +60,7 @@ if (isset($_POST['login'])) {
             } else if ($check['role'] == '2') {
                 $_SESSION['stuff'] = true;
                 header("location:stock.php");
-            } 
+            }
         }
     } else {
         echo "<script>alert('Wrong Credentials')</script>";

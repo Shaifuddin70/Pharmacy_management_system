@@ -298,7 +298,7 @@
 
 .home-section {
   position: relative;
-  background: #ffffff;
+  background: #ffecff;
   height: 100vh;
   left: 130px;
   width: calc(100% - 260px);
@@ -377,6 +377,26 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  position: relative; /* Required for pseudo-element positioning */
+  z-index: 1; /* Ensure content is above the pseudo-element */
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(https://images6.alphacoders.com/135/1351187.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.5; /* Adjust the opacity value as needed */
+  z-index: -1; /* Place the pseudo-element behind the content */
+}
+.index-heading {
+  background-color: antiquewhite;
+  display: flex;
 }
 
 .form {
@@ -388,6 +408,7 @@ body {
   padding: 50px 40px;
   display: flex;
   flex-direction: column;
+  opacity: 0.9;
 }
 
 .form {
