@@ -11,11 +11,11 @@ $query = mysqli_query($conn, "Select *from medicine_stock");
 $total = mysqli_num_rows($query);
 $c = 0;
 if ($total != 0) {
-    while ($result =  mysqli_fetch_assoc($query)) {
-        if ($result['unit'] < 5) {
-            $c++;
-        }
+  while ($result =  mysqli_fetch_assoc($query)) {
+    if ($result['unit'] < 5) {
+      $c++;
     }
+  }
 }
 //Expired Notification
 
@@ -27,11 +27,11 @@ $pquery = mysqli_query($conn, "Select *from purchase_table");
 $ptotal = mysqli_num_rows($pquery);
 $p = 0;
 if ($ptotal != 0) {
-    while ($presult =  mysqli_fetch_assoc($pquery)) {
-        if ($presult['status'] == null) {
-            $p++;
-        }
+  while ($presult =  mysqli_fetch_assoc($pquery)) {
+    if ($presult['status'] == null) {
+      $p++;
     }
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -66,8 +66,8 @@ if ($ptotal != 0) {
       <span class="logo_name">PMS</span>
     </div>
     <?php
-        if (isset($_SESSION['admin'])) {
-            echo '
+    if (isset($_SESSION['admin'])) {
+      echo '
             <ul class="nav-links">
             <li>
                 <a href="dashboard.php">
@@ -93,21 +93,21 @@ if ($ptotal != 0) {
                 <li><a href="brand.php">Brand</a></li>
                 <li><a href="generic.php">Generic</a></li>
                 </ul>
-            </li>
+            </li>';
+      if ($p != 0) {
+        echo '
             <li>
             <a href="purchase_request.php">
             <i class="bx bxs-cart-add" ></i>
-            <span class="link_name">Purchase Request</span>';
-            
-            if ($p != 0) {
-                echo '<span style="position: absolute; top: -0.1px;left: 235px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;">' . $p . '</span>';
-            }
-
-        echo '</a>
+            <span class="link_name">Purchase Request</span>
+                <span style="position: absolute; top: -0.1px;left: 235px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;">' . $p . '</span>
+       </a>
             <ul class="sub-menu blank">
             <li><a class="link_name" href="purchase_request.php">Purchase Request</a></li>
             </ul>
-        </li>
+        </li>';
+      }
+      echo '
             <li>
             <a href="stock.php">
             <i class="bx bxs-store" ></i>
@@ -116,35 +116,44 @@ if ($ptotal != 0) {
             <ul class="sub-menu blank">
               <li><a class="link_name" href="stock.php">Stock</a></li>
             </ul>
-          </li>
+          </li>';
+      if ($c != 0) {
+        echo '
           <li>
             <a href="outofstock.php">
             <i class="bx bxs-minus-circle" ></i>
-              <span class="link_name">Out Of Stock</span>';
+              <span class="link_name">Out Of Stock</span>
            
-                        if ($c != 0) echo '
+                      
                             <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
-                            ' . $c . '</span>' ;
-           echo' </a>
+                            ' . $c . '</span>
+           </a>
             <ul class="sub-menu blank">
               <li><a class="link_name" href="outofstock.php">Out Of Stock</a></li>
               
             </ul>
-          </li>
-          <li>
+          </li>';
+      }
+      if ($e != 0) {
+        echo '
+            <li>
             <a href="expired.php">
             <i class="bx bxs-package" ></i>
-              <span class="link_name">Expired</span>';
+              <span class="link_name">Expired</span>
            
-                        if ($e != 0) echo '
+                       
                             <span style="position: absolute; top: -0.1px;left: 110px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
-                            ' . $e . '</span>' ;
-           echo' </a>
+                            ' . $e . '</span>
+           </a>
             <ul class="sub-menu blank">
               <li><a class="link_name" href="expired.php">Out Of Stock</a></li>
               
             </ul>
           </li>
+
+          ';
+      }
+      echo '
           <li>
             <div class="iocn-link">
               <a href="add_order.php">
@@ -211,10 +220,9 @@ if ($ptotal != 0) {
           <li>
            
             ';
-        }
-        else if ($_SESSION['stuff']) {
+    } else if ($_SESSION['stuff']) {
 
-          echo '
+      echo '
           <ul class="nav-links">
           <li>
               <div class="iocn-link">
@@ -253,11 +261,11 @@ if ($ptotal != 0) {
             <a href="outofstock.php">
             <i class="bx bxs-minus-circle" ></i>
               <span class="link_name">Out Of Stock</span>';
-           
-                        if ($c != 0) echo '
+
+      if ($c != 0) echo '
                             <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
-                            ' . $c . '</span>' ;
-           echo' </a>
+                            ' . $c . '</span>';
+      echo ' </a>
             <ul class="sub-menu blank">
               <li><a class="link_name" href="outofstock.php">Out Of Stock</a></li>
               
@@ -293,27 +301,27 @@ if ($ptotal != 0) {
         <li>
          
           ';
-        }
-        ?>
-   
-     
-        <div class="profile-details">
-          <div class="profile-content">
-            <img src="image/user.png" alt="profileImg">
-          </div>
-          <div class="name-job">
-            <div class="profile_name"><a class="link_name text-white text-uppercase" href="profile.php"><?php
+    }
+    ?>
 
-                                      $query = mysqli_query($conn, "SELECT * FROM `employee` WHERE `id`='$_SESSION[eid]'");
-                                      $fetch = mysqli_fetch_array($query);
-                                      echo $fetch['name'];
-                                      ?></a></div>
 
-          </div>
-          <a href="logout.php">
-            <i class='bx bx-log-out'></i></a>
-        </div>
-      </li>
+    <div class="profile-details">
+      <div class="profile-content">
+        <img src="image/user.png" alt="profileImg">
+      </div>
+      <div class="name-job">
+        <div class="profile_name"><a class="link_name text-white text-uppercase" href="profile.php"><?php
+
+                                                                                                    $query = mysqli_query($conn, "SELECT * FROM `employee` WHERE `id`='$_SESSION[eid]'");
+                                                                                                    $fetch = mysqli_fetch_array($query);
+                                                                                                    echo $fetch['name'];
+                                                                                                    ?></a></div>
+
+      </div>
+      <a href="logout.php">
+        <i class='bx bx-log-out'></i></a>
+    </div>
+    </li>
     </ul>
   </div>
   <section class="home-section">
