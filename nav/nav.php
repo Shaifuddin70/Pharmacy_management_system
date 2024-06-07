@@ -256,22 +256,25 @@ if ($ptotal != 0) {
             <ul class="sub-menu blank">
               <li><a class="link_name" href="stock.php">Stock</a></li>
             </ul>
-          </li>
-          <li>
-            <a href="outofstock.php">
-            <i class="bx bxs-minus-circle" ></i>
-              <span class="link_name">Out Of Stock</span>';
-
-      if ($c != 0) echo '
-                            <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
-                            ' . $c . '</span>';
-      echo ' </a>
-            <ul class="sub-menu blank">
-              <li><a class="link_name" href="outofstock.php">Out Of Stock</a></li>
-              
-            </ul>
-          </li>
-          
+          </li>';
+      if ($c != 0) {
+        echo '
+              <li>
+                <a href="outofstock.php">
+                <i class="bx bxs-minus-circle" ></i>
+                  <span class="link_name">Out Of Stock</span>
+               
+                          
+                                <span style="position: absolute; top: -0.1px;left: 160px;padding: 0.1px 9px;border-radius: 50%;background: red;color: white;margin-left:40px;">
+                                ' . $c . '</span>
+               </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="outofstock.php">Out Of Stock</a></li>
+                  
+                </ul>
+              </li>';
+      }
+      echo '
           <li>
             <div class="iocn-link">
               <a href="add_order.php">
