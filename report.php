@@ -11,23 +11,30 @@ if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
 
 <head>
     <link rel="stylesheet" href="nav/dashboard.css">
+    <style>
+        .container {}
+    </style>
 </head>
 <div class="home-content">
     <div class="overview-boxes">
         <div class="container">
-        <div class="row mt-5 text-center custom"> 
-            <div class="col-5  m-2 p-2 custom-box">
-            <a href="purchase_report.php">  <h3>Purchase Report</h3>
-                <i class='bx bxs-cart-download' ></i></a>
-            </div>
-           <div class="col-5  m-2 p-2 custom-box">
-           <a href="invoices.php"> <h3>Sales Report</h3>
-                <i class='bx bx-money' ></i></a>
+            <div class="row mt-5 text-center custom">
+                <div class="col-5  m-2 p-4 box1 box">
+                    <a href="purchase_report.php" style=" color: white;">
+                        <h3 style=" color: white;">Purchase Report</h3>
+                        <i class='bx bxs-cart-download' style=" color: white;"></i>
+                    </a>
+                </div>
+                <div class="col-5  m-2 p-4 box2 box">
+                    <a href="invoices.php" style=" color: white;">
+                        <h3 style=" color: white;">Sales Report</h3>
+                        <i style=" color: white;" class='bx bx-money'></i>
+                    </a>
+                </div>
             </div>
         </div>
-        </div>
-       
-        
+
+
     </div>
 
-<?php include 'nav/footer.php'; ?>
+    <?php include 'nav/footer.php'; ?>

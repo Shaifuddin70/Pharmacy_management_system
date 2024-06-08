@@ -7,8 +7,7 @@ body {
 }
 .receipt-main {
   background: #ffffff none repeat scroll 0 0;
-  border-bottom: 12px solid #333333;
-  border-top: 12px solid #9f181c;
+
   margin-top: 50px;
   margin-bottom: 50px;
   padding: 40px 30px !important;
@@ -27,14 +26,9 @@ body {
   font-weight: 400 !important;
   margin: 0 !important;
 }
-.receipt-main::after {
-  background: #414143 none repeat scroll 0 0;
-  content: "";
-  height: 5px;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: -13px;
+#container {
+  margin-left: auto;
+  margin-right: auto;
 }
 .receipt-main thead {
   background: #414143 none repeat scroll 0 0;
@@ -84,8 +78,4 @@ body {
 .receipt-header-mid {
   margin: 24px 0;
   overflow: hidden;
-}
-
-#container {
-  background-color: #dcdcdc;
 }

@@ -78,10 +78,10 @@ if (isset($_POST['delete_invoice'])) {
 }
 ?>
 
-<div class="container"style="margin-top: -45px;">
+<div class="container" style="margin-top: -45px;">
     <div class="title">
         <h2 class="text-center text-uppercase p-2">All Sales</h2>
-        <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
+        <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
             <button onclick="purchaseReport()" class="btn btn-success"> Create Report</button>
         <?php endif; ?>
         <form method="get">
@@ -106,7 +106,7 @@ if (isset($_POST['delete_invoice'])) {
         </form>
     </div>
     <div id="table">
-        <h2 id="invisible" class="d-none text-center text-uppercase p-2" >Sales Report</h2>
+        <h2 id="invisible" class="d-none text-center text-uppercase p-2">Sales Report</h2>
         <table id="zctb" class="display table table-bordered table-hover text-center" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -118,7 +118,7 @@ if (isset($_POST['delete_invoice'])) {
                     <th>Subtotal</th>
                     <th>Date</th>
                     <th id="visible">Details</th>
-                    <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
+                    <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
                         <th id="visible">Action</th>
                     <?php endif; ?>
                 </tr>
@@ -136,8 +136,8 @@ if (isset($_POST['delete_invoice'])) {
                         <td><?php echo $row['discount']; ?>%</td>
                         <td><?php echo $row['subtotal']; ?></td>
                         <td><?php echo date('Y-m-d', strtotime($row['created_at'])); ?></td>
-                        <td id="visible"><a href="testinvoice.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
-                        <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
+                        <td id="visible"><a href="invoice_details.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
+                        <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
                             <td id="visible">
                                 <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.');">
                                     <input type="hidden" name="invoice_id" value="<?php echo $row['invoice_id']; ?>">
@@ -152,7 +152,7 @@ if (isset($_POST['delete_invoice'])) {
     </div>
     <div class="pagination">
         <ul class="pagination">
-           
+
             <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
                 <a class="page-link" href="?page=<?php echo $page - 1; ?>&emp=<?php echo $filter_employee; ?>&from=<?php echo $filter_from; ?>&to=<?php echo $filter_to; ?>">&laquo; Previous</a>
             </li>
@@ -161,7 +161,7 @@ if (isset($_POST['delete_invoice'])) {
                     <a class="page-link" href="?page=<?php echo $i; ?>&emp=<?php echo $filter_employee; ?>&from=<?php echo $filter_from; ?>&to=<?php echo $filter_to; ?>"><?php echo $i; ?></a>
                 </li>
             <?php endfor; ?>
-          
+
             <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
                 <a class="page-link" href="?page=<?php echo $page + 1; ?>&emp=<?php echo $filter_employee; ?>&from=<?php echo $filter_from; ?>&to=<?php echo $filter_to; ?>">Next &raquo;</a>
             </li>
@@ -177,7 +177,7 @@ if (isset($_POST['delete_invoice'])) {
                 defaultDate: "+1w",
                 changeMonth: true,
                 numberOfMonths: 1,
-                dateFormat: "yy-mm-dd", 
+                dateFormat: "yy-mm-dd",
             })
             .on("change", function() {
                 to.datepicker("option", "minDate", getDate(this));
@@ -186,7 +186,7 @@ if (isset($_POST['delete_invoice'])) {
                 defaultDate: "+1w",
                 changeMonth: true,
                 numberOfMonths: 1,
-                dateFormat: "yy-mm-dd", 
+                dateFormat: "yy-mm-dd",
             })
             .on("change", function() {
                 from.datepicker("option", "maxDate", getDate(this));
