@@ -136,7 +136,7 @@ if (isset($_POST['delete_invoice'])) {
                         <td><?php echo $row['discount']; ?>%</td>
                         <td><?php echo $row['subtotal']; ?></td>
                         <td><?php echo date('Y-m-d', strtotime($row['created_at'])); ?></td>
-                        <td id="visible"><a href="invoice_details.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
+                        <td id="visible"><a href="testinvoice.php?invoice_id=<?php echo $row['invoice_id']; ?>" class="btn btn-info">Details</a></td>
                         <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] == true) : ?>
                             <td id="visible">
                                 <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.');">
