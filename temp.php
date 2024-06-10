@@ -1,7 +1,6 @@
 <?php
 include 'nav/nav.php';
 error_reporting(0);
-
 // Authorization check
 if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
     echo "<script>alert('Unauthorized Access')</script>";
@@ -13,7 +12,7 @@ if (!isset($_SESSION['stuff']) && !isset($_SESSION['admin'])) {
 $employee_id = isset($_SESSION['eid']) ? $_SESSION['eid'] : null;
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['submit'])) {
     // Retrieve form data
     $customer_id = $_POST['customer'];
     $discount = $_POST['discount'];
@@ -22,10 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $medicines = $_POST['medicine'];
     $quantities = $_POST['quantity'];
     $total_prices = $_POST['submit_total_price'];
-
-    // Round subtotal as per the required logic
-    $decimalPart = $subtotal - floor($subtotal);
-    $rounded_subtotal = ($decimalPart > 0.5) ? ceil($subtotal) : floor($subtotal);
 
     // Calculate total profit for the invoice
     $total_pprice = 0;
@@ -40,12 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $row = mysqli_fetch_assoc($result);
         $buying_price = $row['pprice'];
         $total_pprice += $buying_price * $quantity;
+        // Calculate profit for the current item
+        echo $total_pprice . '" "';
     }
-    $profit = ($rounded_subtotal - $total_pprice);
-
+    $profit = ($subtotal - $total_pprice);
+    // Add profit to the total profit
     // Insert invoice data into the database
     $query = "INSERT INTO invoices (customer_id, employee_id, discount, subtotal, total, profit) 
-              VALUES ('$customer_id', '$employee_id', '$discount', '$rounded_subtotal', '$total', '$profit')";
+              VALUES ('$customer_id', '$employee_id', '$discount', '$subtotal', '$total', '$profit')";
     $result = mysqli_query($conn, $query);
 
     if (!$result) {
@@ -80,13 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('Invoice submitted successfully')</script>";
         echo "<script>window.location='invoices.php'</script>";
         // End script execution after redirection
-        exit();
     }
 }
 ?>
 
 <div class="container">
     <div class="title">
+
         <form action="" method="post" onsubmit="return validateForm()">
             <h2 class="text-center text-uppercase p-2">Create New Invoice</h2>
             <?php
@@ -104,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $query = "SELECT * FROM customer";
                 $result = mysqli_query($conn, $query);
                 ?>
-                <select class="form-control form-control col-3 ml-2 mb-2" aria-label="Default select example" name="customer" id="customer" required>
+                <select class="form-control form-control col-3 ml-2 mb-2" aria-label="Default select example" name="customer" id="customer">
                     <option selected disabled>Select Customer</option>
                     <?php while ($row = mysqli_fetch_assoc($result)) : ?>
                         <option value="<?php echo $row['customer_id']; ?>"> <?php echo $row['customer_name']; ?> </option>
@@ -131,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $query = "SELECT m.* FROM Medicine m INNER JOIN medicine_stock s ON m.medicine_id = s.medicine_id WHERE s.unit > 0";
                             $result = mysqli_query($conn, $query);
                             ?>
-                            <select class="form-control form-control-lg medicine" aria-label="Default select example" name="medicine[]" required>
+                            <select class="form-control form-control-lg medicine" aria-label="Default select example" name="medicine[]" id="medicine">
                                 <option selected disabled>Select Medicine</option>
                                 <?php while ($row = mysqli_fetch_assoc($result)) : ?>
                                     <option value="<?php echo $row['medicine_id']; ?>"> <?php echo $row['medicine_name']; ?> </option>
@@ -139,18 +136,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </td>
                         <td>
-                            <input type="text" class="form-control form-control-lg available_quantity" name="available_quantity[]" placeholder="Available Quantity" disabled>
+                            <input type="text" class="form-control form-control-lg available_quantity" name="available_quantity[]" id="available_quantity" aria-describedby="sizing-addon1" placeholder="Available Quantity" disabled>
                         </td>
                         <td>
-                            <input type="number" class="form-control form-control-lg quantity" name="quantity[]" placeholder="Item Quantity" required>
+                            <input type="text" class="form-control form-control-lg quantity" required="true" name="quantity[]" id="quantity" placeholder="Item Quantity">
                         </td>
                         <td>
-                            <input type="text" class="form-control form-control-lg unit_price" name="unit_price[]" placeholder="Unit Price" disabled>
+                            <input type="text" class="form-control form-control-lg unit_price" name="unit_price[]" id="unit_price" aria-describedby="sizing-addon1" placeholder="Unit Price" disabled>
                         </td>
                         <td>
-                            <input type="text" class="form-control form-control-lg total_price" name="total_price[]" placeholder="Total Price" disabled>
+                            <input type="text" class="form-control form-control-lg total_price" name="total_price[]" id="total_price" aria-describedby="sizing-addon1" placeholder="Total Price" disabled>
                             <input type="hidden" class="submit_total_price" name="submit_total_price[]" value="">
                         </td>
+
                         <td>
                             <button type="button" class="btn btn-danger delete-row">Delete</button>
                         </td>
@@ -159,32 +157,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="button" class="btn btn-success add-row">Add New Medicine</button>
                 <div class="subtotal col-3 mb-2 mt-2">
                     <label for="total">Total: </label>
-                    <input type="text" class="form-control form-control-lg" name="total" id="total" placeholder="Total" disabled>
+                    <input type="text" class="form-control form-control-lg " name="total" id="total" placeholder="Total" disabled>
                     <input type="hidden" id="submit_total" name="submit_total" value="">
                     <label for="discount">Discount (%): </label>
-                    <input type="number" class="form-control" name="discount" id="discount" placeholder="Enter discount percentage">
-                    <div class="sub-total">
-                        <div class="actual-total">
-                            <label for="actual_subtotal">Actual Subtotal: </label>
-                            <input type="text" class="form-control" name="actual_subtotal" id="actual_subtotal" placeholder="Actual Subtotal" disabled>
-                        </div>
-                        <div class="equal">
-                            <span>≈</span>
-                        </div>
-                        <div class="rounded-subtotal">
-                            <label for="subtotal">Rounded Subtotal: </label>
-                            <input type="text" class="form-control" name="subtotal" id="subtotal" placeholder="Subtotal" disabled>
-                        </div>
-                    </div>
+                    <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount %" required>
+                    <label for="subtotal">Subtotal: </label>
+                    <input type="text" class="form-control form-control-lg" name="subtotal" id="subtotal" placeholder="Subtotal" disabled>
                     <input type="hidden" id="submit_subtotal" name="submit_subtotal" value="">
                 </div>
-                <div class="text-center col-3 mb-2 mt-2">
-                    <button type="submit" class="btn btn-primary">Create Invoice</button>
-                </div>
+            </div>
+            <div class="button">
+                <button class="btn btn-primary" type="submit" name="submit">SUBMIT</button>
             </div>
         </form>
     </div>
 </div>
+
 
 <script>
     // When the medicine selection changes
@@ -207,47 +195,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Update available quantity and unit price
                     row.find('.available_quantity').val(data.available_quantity);
                     row.find('.unit_price').val(data.unit_price);
-                    row.find('.quantity').val(''); // Clear the quantity field
-                    row.find('.total_price').val(''); // Clear the total price field
-                    row.find('.submit_total_price').val(''); // Clear the hidden total price field
+                    calculateTotalPrice(row); // Calculate total price
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
             }
         });
     });
 
-    // When quantity changes
+    // In your JavaScript
+    function calculateTotalPrice(row) {
+        var sellQuantity = parseInt(row.find('.quantity').val()); // Get the sell quantity
+        var unitPrice = parseFloat(row.find('.unit_price').val()); // Get the unit price
+        var totalPrice = sellQuantity * unitPrice; // Calculate total price
+
+        row.find('.total_price').val(totalPrice.toFixed(2)); // Set the total price in the visible field
+        row.find('.submit_total_price').val(totalPrice.toFixed(2)); // Update hidden field
+        calculateSubtotal(); // Recalculate subtotal
+    }
+
+
+
+
+    // When the sell quantity changes
     $(document).on('input', '.quantity', function() {
         var row = $(this).closest('.medicine-row');
-        calculateTotalPrice(row); // Calculate total price
+        calculateTotalPrice(row); // Recalculate total price
+
     });
 
-    // Function to calculate the total price
-    function calculateTotalPrice(row) {
-        var availableQuantity = parseFloat(row.find('.available_quantity').val());
-        var quantity = parseFloat(row.find('.quantity').val());
-        var unitPrice = parseFloat(row.find('.unit_price').val());
-        var totalPriceInput = row.find('.total_price');
-        var submitTotalPriceInput = row.find('.submit_total_price');
+    // When the delete button is clicked
+    $(document).on('click', '.delete-row', function() {
+        $(this).closest('tr').remove(); // Remove the closest row
+        calculateSubtotal(); // Recalculate subtotal
+    });
 
-        if (!isNaN(quantity) && !isNaN(unitPrice)) {
-            if (quantity > availableQuantity) {
-                // Handle the case where the ordered quantity is greater than the available quantity
-                alert("Quantity exceeds available stock.");
-                row.find('.quantity').val('');
-                totalPriceInput.val('');
-                submitTotalPriceInput.val('');
-                calculateSubtotal(); // Recalculate the subtotal
-            } else {
-                var totalPrice = quantity * unitPrice;
-                totalPriceInput.val(totalPrice.toFixed(2));
-                submitTotalPriceInput.val(totalPrice.toFixed(2));
-                calculateSubtotal(); // Recalculate the subtotal
-            }
+    // Add Row
+    $('.add-row').click(function() {
+        // Check if there are existing rows in the table
+        if ($('#medicineTable tbody tr').length === 1) {
+            // If no rows exist, add a new row without cloning the last row
+            $('#medicineTable tbody').append('<tr class="medicine-row">' +
+                '<td><?php
+                        $catagory = "SELECT * FROM Medicine";
+                        $result = mysqli_query($conn, $catagory);
+                        ?> <
+                select class = "form-control form-control-lg medicine"
+                aria - label = "Default select example"
+                name = "medicine[]"
+                id = "medicine" > < option selected disabled > Select Medicine < /option><?php while ($row = mysqli_fetch_assoc($result)) : ?><option value="<?php echo $row['medicine_id']; ?>"> <?php echo $row['medicine_name']; ?> </option > <?php endwhile; ?> < /select></td > ' +
+            '<td><input type="text" class="form-control form-control-lg available_quantity" name="available_quantity[]" id="available_quantity" aria-describedby="sizing-addon1" placeholder="Available Quantity" disabled></td>' +
+            '<td><input type="text" class="form-control form-control-lg quantity" required="true" name="quantity[]" id="quantity" placeholder="Item Quantity"></td>' +
+            '<td><input type="text" class="form-control form-control-lg unit_price" name="unit_price[]" id="unit_price" aria-describedby="sizing-addon1" placeholder="Unit Price" disabled></td>' +
+            '<td><input type="text" class="form-control form-control-lg total_price" name="total_price[]" id="total_price" aria-describedby="sizing-addon1" placeholder="Total Price" disabled></td>' +
+            '<td><button type="button" class="btn btn-danger delete-row">Delete</button></td>' +
+            '</tr>');
         } else {
-            totalPriceInput.val('');
-            submitTotalPriceInput.val('');
+            // If rows exist, clone the last row and add a new one
+            var lastRow = $('#medicineTable tbody tr').last(); // Get the last row
+            var newRow = lastRow.clone(); // Clone the last row
+            newRow.find('input').val(''); // Clear input values in the new row
+            newRow.find('select').prop('selectedIndex', 0); // Reset select element to default
+            // newRow.find('.quantity').val('1'); // Set default sell quantity to 1
+            $('#medicineTable tbody').append(newRow); // Append the new row to the table body
         }
-    }
+    });
 
     function calculateSubtotal() {
         var total = 0;
@@ -266,50 +279,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             subtotal = total - discountAmount;
         }
 
-        // Calculate rounded subtotal
-        var roundedSubtotal;
-        var decimalPart = subtotal - Math.floor(subtotal);
-
-        if (decimalPart > 0.5) {
-            roundedSubtotal = Math.ceil(subtotal);
-        } else {
-            roundedSubtotal = Math.floor(subtotal);
-        }
-
         // Update visible fields
         $('#total').val(total.toFixed(2)); // Update the total field
-        $('#subtotal').val(roundedSubtotal.toFixed(2)); // Update the rounded subtotal field
-        $('#actual_subtotal').val(subtotal.toFixed(2)); // Update the actual subtotal field
+        $('#subtotal').val(subtotal.toFixed(2)); // Update the subtotal field
 
         // Update hidden fields for submission
+
         $('#submit_total').val(total.toFixed(2));
-        $('#submit_subtotal').val(roundedSubtotal.toFixed(2));
+        $('#submit_subtotal').val(subtotal.toFixed(2));
     }
 
-    $(document).on('input', '#discount', function() {
-        calculateSubtotal(); // Recalculate the subtotal when discount changes
-    });
-    // Add new medicine row
-    $('.add-row').click(function() {
-        var newRow = $('.medicine-row:first').clone();
-        newRow.find('input').val('');
-        newRow.find('select').val('');
-        $('#medicineTable').append(newRow);
+
+    // Event Handlers: Recalculate subtotal when these events occur
+    $(document).on('input', '.quantity, #discount', function() {
+        calculateSubtotal();
     });
 
-    // Delete medicine row
-    $(document).on('click', '.delete-row', function() {
-        $(this).closest('.medicine-row').remove();
+    $(document).on('change', '.medicine', function() {
+        var row = $(this).closest('.medicine-row');
+        calculateTotalPrice(row); // Trigger price recalculation
         calculateSubtotal(); // Recalculate the subtotal
     });
 
-    // Validate form before submission
+    $(document).on('click', '.delete-row', function() {
+        $(this).closest('tr').remove(); // Remove the closest row
+        calculateSubtotal(); // Recalculate the subtotal
+    });
+
+
     function validateForm() {
-        var customer = $('#customer').val();
-        if (!customer) {
-            alert('Please select a customer.');
-            return false;
+        var customer = document.getElementById("customer").value;
+        var discount = document.getElementById("discount").value;
+        var medicines = document.getElementsByName("medicine[]");
+
+        if (customer == "" || discount == "") {
+            alert("Customer and Discount fields are required.");
+            return false; // Prevent form submission
         }
-        return true;
+
+        for (var i = 0; i < medicines.length; i++) {
+            if (medicines[i].value == "") {
+                alert("Medicine selection cannot be empty.");
+                return false; // Prevent form submission
+            }
+        }
+
+        return true; // Submit the form if all fields are filled
+    }
+
+    function validateForm() {
+        var customer = document.getElementById("customer").value;
+        var discount = document.getElementById("discount").value;
+        var medicines = document.getElementsByName("medicine[]");
+        var quantities = document.getElementsByName("quantity[]");
+        var availableQuantities = document.getElementsByName("available_quantity[]");
+
+        if (customer == "" || discount == "") {
+            alert("Customer and Discount fields are required.");
+            return false; // Prevent form submission
+        }
+
+        for (var i = 0; i < medicines.length; i++) {
+            var medicine = medicines[i].value;
+            var quantity = parseInt(quantities[i].value);
+            var availableQuantity = parseInt(availableQuantities[i].value);
+
+            if (medicine == "") {
+                alert("Medicine selection cannot be empty.");
+                return false; // Prevent form submission
+            }
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert("Quantity must be a positive number.");
+                return false; // Prevent form submission
+            }
+
+            if (quantity > availableQuantity) {
+                alert("Sell quantity cannot exceed available quantity for the selected medicine.");
+                return false; // Prevent form submission
+            }
+        }
+
+        return true; // Submit the form if all fields are filled and quantities are valid
     }
 </script>
+
+<?php include 'nav/footer.php'; ?>

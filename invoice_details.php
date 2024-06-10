@@ -119,7 +119,10 @@ $total = $invoice_items[0]['total'];
                                     <strong><?php echo $discount; ?>%</strong>
                                 </p>
                                 <p>
-                                    <strong><?php echo $subtotal; ?></strong>
+                                    <?php
+                                    $actual = $total - ($total * ($discount / 100));
+                                    ?>
+                                    <strong><?php echo $actual, ' ≈ ',  $subtotal; ?></strong>
                                 </p>
                             </td>
                         </tr>

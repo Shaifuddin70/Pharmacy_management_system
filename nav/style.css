@@ -25,7 +25,18 @@
   font-weight: 500;
   font-size: large;
 }
-
+.sub-total {
+  display: flex;
+  align-items: center;
+}
+.actual-total {
+  margin-right: 10px;
+}
+.equal {
+  margin-top: 60px;
+  margin-right: 5px;
+  font-size: 24px;
+}
 .custom {
   color: rgb(0, 0, 0) !important;
   height: 100px;
